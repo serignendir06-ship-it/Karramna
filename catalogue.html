@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue produits agroalimentaires | Karramna Agro Dakar</title>
+<meta name="description" content="Riz, mil, légumes, huiles, poissons et volailles à commander en ligne à Dakar. Livraison à Pikine, Guédiawaye, Parcelles Assainies et toute la banlieue dakaroise.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.karramna-agro.sn/catalogue.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Catalogue produits agroalimentaires | Karramna Agro Dakar">
+<meta property="og:description" content="Riz, mil, légumes, huiles, poissons et volailles à commander en ligne à Dakar. Livraison à Pikine, Guédiawaye, Parcelles Assainies et toute la banlieue dakaroise.">
+<meta property="og:locale" content="fr_SN">
+<meta property="og:site_name" content="Karramna Agro">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-links">
+          <a href="tel:+221770000000">+221 77 000 00 00</a>
+          <a href="mailto:contact@karramna-agro.sn">contact@karramna-agro.sn</a>
+        </div>
+        <div class="topbar-links">
+          <span data-i18n="topbar.location">Pikine, Dakar — Sénégal</span>
+        </div>
+      </div>
+    </div>
+    <div class="container navbar">
+      <a href="index.html" class="brand">
+        <img class="brand-mark" src="images/logo/logo.svg" width="48" height="48" alt="Karramna Agro">
+        <span>Karramna Agro<span class="brand-sub">Marketplace agroalimentaire</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="index.html"><span data-i18n="nav.home">Accueil</span></a>
+        <a href="catalogue.html" aria-current="page" data-i18n="nav.catalogue">Catalogue</a>
+        <a href="packs.html" data-i18n="nav.packs">Packs & Kits</a>
+        <a href="apropos.html" data-i18n="nav.about">À propos</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Choix de la langue / Language">
+          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <a href="compte.html" class="account-btn" id="accountNavLink" aria-label="Mon compte">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span class="account-label" id="accountNavLabel">Se connecter</span>
+        </a>
+        <a href="panier.html" class="cart-btn" aria-label="Voir le panier">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+          <span class="cart-label" data-i18n="nav.cart">Panier</span>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div class="page-header">
+    <div class="img-style scale-img"><img src="images/pages/catalogue.jpg" width="1600" height="500" alt="Catalogue de produits agroalimentaires Karramna Agro"></div>
+    <div class="page-header-overlay"></div>
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html"><span data-i18n="nav.home">Accueil</span></a> / <span data-i18n="pageHeaders.catalogue.bc">Catalogue</span></div>
+      <h1 data-i18n="pageHeaders.catalogue.h1">Catalogue produits agroalimentaires — Dakar</h1>
+      <p data-i18n="pageHeaders.catalogue.p">Riz, mil, légumes frais, huiles, poissons et volailles livrés à Dakar, Pikine, Guédiawaye, Parcelles Assainies et toute la banlieue. Prix par sac, carton ou kilo.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container catalogue-layout">
+      <aside class="filters">
+        <h3 data-i18n="catalogue.searchTitle">Recherche</h3>
+        <div class="search-row">
+          <input type="search" id="search-input" placeholder="Rechercher un produit…" aria-label="Rechercher un produit" data-i18n-placeholder="catalogue.searchPlaceholder" data-i18n-aria="catalogue.searchPlaceholder">
+        </div>
+        <form id="filters-form">
+          <div class="filter-group">
+            <h3 data-i18n="catalogue.catTitle">Catégories</h3>
+            <label class="filter-option"><input type="checkbox" value="cereales"> <span data-i18n="categories.cereales">Céréales</span></label>
+<label class="filter-option"><input type="checkbox" value="legumes"> <span data-i18n="categories.legumes">Légumes</span></label>
+<label class="filter-option"><input type="checkbox" value="tubercules"> <span data-i18n="categories.tubercules">Tubercules</span></label>
+<label class="filter-option"><input type="checkbox" value="huiles"> <span data-i18n="categories.huiles">Huiles & condiments</span></label>
+<label class="filter-option"><input type="checkbox" value="poissons"> <span data-i18n="categories.poissons">Poissons</span></label>
+<label class="filter-option"><input type="checkbox" value="volailles"> <span data-i18n="categories.volailles">Volaille & viande</span></label>
+          </div>
+        </form>
+      </aside>
+
+      <div>
+        <div class="results-bar">
+          <span id="results-count">20 produits</span>
+          <select id="sort-select" aria-label="Trier par">
+            <option value="default" data-i18n="catalogue.sortRelevance">Trier : pertinence</option>
+            <option value="asc" data-i18n="catalogue.sortPriceAsc">Prix croissant</option>
+            <option value="desc" data-i18n="catalogue.sortPriceDesc">Prix décroissant</option>
+          </select>
+        </div>
+        <div class="grid-products" id="catalogue-grid">
+      <!-- ===== PRODUIT : Riz brisé parfumé (p01) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p01" data-cat="cereales" data-price="13500"
+        data-name="Riz brisé parfumé" data-name-en="Fragrant broken rice"
+        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
+        data-supplier="Coopérative Vallée du Fleuve"
+        data-desc="Riz brisé importé, grain court, idéal pour le tiéboudieune et les plats mijotés. Conditionné en sacs de 25 kg, livré scellé d'origine." data-desc-en="Imported broken rice, short grain, ideal for tiéboudieune and stews. Packed in 25 kg bags, delivered factory-sealed."
+        data-badge="Populaire" data-badge-en="Popular">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p01.jpg" width="800" height="600" alt="Riz brisé parfumé"></div>
+        <span class="tag-badge">Populaire</span>
+        </div>
+        <div class="card-body">
+          <h3>Riz brisé parfumé</h3>
+          <span class="card-unit">sac de 25 kg · Coopérative Vallée du Fleuve</span>
+          <div class="card-price-row">
+            <span class="card-price">13 500 FCFA<br><small>sac de 25 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p01">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Mil local (souna) (p02) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p02" data-cat="cereales" data-price="21000"
+        data-name="Mil local (souna)" data-name-en="Local millet (souna)"
+        data-unit="sac de 50 kg" data-unit-en="50 kg bag"
+        data-supplier="Groupement Bassin Arachidier"
+        data-desc="Mil local (souna) cultivé dans le Bassin arachidier, moulu ou entier selon disponibilité. Base du couscous de mil et du lakh." data-desc-en="Local millet (souna) grown in the Groundnut Basin, milled or whole depending on availability. Base for millet couscous and lakh."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p02.jpg" width="800" height="600" alt="Mil local (souna)"></div>
+        </div>
+        <div class="card-body">
+          <h3>Mil local (souna)</h3>
+          <span class="card-unit">sac de 50 kg · Groupement Bassin Arachidier</span>
+          <div class="card-price-row">
+            <span class="card-price">21 000 FCFA<br><small>sac de 50 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p02">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Maïs jaune (p03) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p03" data-cat="cereales" data-price="17500"
+        data-name="Maïs jaune" data-name-en="Yellow maize"
+        data-unit="sac de 50 kg" data-unit-en="50 kg bag"
+        data-supplier="Ferme Kaolack"
+        data-desc="Maïs jaune sec, grain calibré, adapté à la mouture pour farine ou à l'alimentation animale." data-desc-en="Dry yellow maize, graded kernels, suited for milling into flour or animal feed."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p03.jpg" width="800" height="600" alt="Maïs jaune"></div>
+        </div>
+        <div class="card-body">
+          <h3>Maïs jaune</h3>
+          <span class="card-unit">sac de 50 kg · Ferme Kaolack</span>
+          <div class="card-price-row">
+            <span class="card-price">17 500 FCFA<br><small>sac de 50 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p03">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Oignon local (p04) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p04" data-cat="legumes" data-price="9800"
+        data-name="Oignon local" data-name-en="Local onion"
+        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
+        data-supplier="Producteurs Niayes"
+        data-desc="Oignon violet local des Niayes, bulbe ferme à forte conservation, essentiel pour vos sauces et bases de plats." data-desc-en="Local purple onion from the Niayes, firm bulb with strong keeping quality, essential for sauces and dish bases."
+        data-badge="Frais du jour" data-badge-en="Fresh today">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p04.jpg" width="800" height="600" alt="Oignon local"></div>
+        <span class="tag-badge">Frais du jour</span>
+        </div>
+        <div class="card-body">
+          <h3>Oignon local</h3>
+          <span class="card-unit">sac de 25 kg · Producteurs Niayes</span>
+          <div class="card-price-row">
+            <span class="card-price">9 800 FCFA<br><small>sac de 25 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p04">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Tomate fraîche (p05) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p05" data-cat="legumes" data-price="6200"
+        data-name="Tomate fraîche" data-name-en="Fresh tomatoes"
+        data-unit="cageot de 15 kg" data-unit-en="15 kg crate"
+        data-supplier="Producteurs Niayes"
+        data-desc="Tomate fraîche de saison, récoltée à maturité chez nos maraîchers partenaires des Niayes. Idéale pour sauces et salades." data-desc-en="Seasonal fresh tomatoes, picked ripe from our partner market gardeners in the Niayes. Ideal for sauces and salads."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p05.jpg" width="800" height="600" alt="Tomate fraîche"></div>
+        </div>
+        <div class="card-body">
+          <h3>Tomate fraîche</h3>
+          <span class="card-unit">cageot de 15 kg · Producteurs Niayes</span>
+          <div class="card-price-row">
+            <span class="card-price">6 200 FCFA<br><small>cageot de 15 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p05">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Chou pommé (p06) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p06" data-cat="legumes" data-price="5400"
+        data-name="Chou pommé" data-name-en="Cabbage"
+        data-unit="unité (carton de 10)" data-unit-en="unit (carton of 10)"
+        data-supplier="Producteurs Niayes"
+        data-desc="Chou pommé frais, feuilles serrées et croquantes, cultivé localement. Vendu à l'unité, conditionné en carton de 10." data-desc-en="Fresh cabbage, tight and crisp leaves, locally grown. Sold per unit, packed in cartons of 10."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p06.jpg" width="800" height="600" alt="Chou pommé"></div>
+        </div>
+        <div class="card-body">
+          <h3>Chou pommé</h3>
+          <span class="card-unit">unité (carton de 10) · Producteurs Niayes</span>
+          <div class="card-price-row">
+            <span class="card-price">5 400 FCFA<br><small>unité (carton de 10)</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p06">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Aubergine amère (diakhatou) (p07) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p07" data-cat="legumes" data-price="4800"
+        data-name="Aubergine amère (diakhatou)" data-name-en="Bitter eggplant (diakhatou)"
+        data-unit="sac de 20 kg" data-unit-en="20 kg bag"
+        data-supplier="Producteurs Niayes"
+        data-desc="Aubergine amère (diakhatou), variété locale utilisée dans le mafé et les sauces traditionnelles sénégalaises." data-desc-en="Bitter eggplant (diakhatou), a local variety used in mafé and traditional Senegalese sauces."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p07.jpg" width="800" height="600" alt="Aubergine amère (diakhatou)"></div>
+        </div>
+        <div class="card-body">
+          <h3>Aubergine amère (diakhatou)</h3>
+          <span class="card-unit">sac de 20 kg · Producteurs Niayes</span>
+          <div class="card-price-row">
+            <span class="card-price">4 800 FCFA<br><small>sac de 20 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p07">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Pomme de terre (p08) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p08" data-cat="tubercules" data-price="11500"
+        data-name="Pomme de terre" data-name-en="Potatoes"
+        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
+        data-supplier="Import Groupe Mimex"
+        data-desc="Pomme de terre importée, calibre moyen, polyvalente pour friture, ragoût ou accompagnement." data-desc-en="Imported potatoes, medium size, versatile for frying, stews or side dishes."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p08.jpg" width="800" height="600" alt="Pomme de terre"></div>
+        </div>
+        <div class="card-body">
+          <h3>Pomme de terre</h3>
+          <span class="card-unit">sac de 25 kg · Import Groupe Mimex</span>
+          <div class="card-price-row">
+            <span class="card-price">11 500 FCFA<br><small>sac de 25 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p08">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Manioc frais (p09) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p09" data-cat="tubercules" data-price="6800"
+        data-name="Manioc frais" data-name-en="Fresh cassava"
+        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
+        data-supplier="Producteurs Casamance"
+        data-desc="Manioc frais de Casamance, racine tendre idéale pour la cuisson vapeur, le foutou ou la friture." data-desc-en="Fresh cassava from Casamance, tender root ideal for steaming, foutou or frying."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p09.jpg" width="800" height="600" alt="Manioc frais"></div>
+        </div>
+        <div class="card-body">
+          <h3>Manioc frais</h3>
+          <span class="card-unit">sac de 25 kg · Producteurs Casamance</span>
+          <div class="card-price-row">
+            <span class="card-price">6 800 FCFA<br><small>sac de 25 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p09">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Patate douce (p10) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p10" data-cat="tubercules" data-price="7200"
+        data-name="Patate douce" data-name-en="Sweet potato"
+        data-unit="sac de 20 kg" data-unit-en="20 kg bag"
+        data-supplier="Producteurs Casamance"
+        data-desc="Patate douce locale à chair orangée, sucrée, riche en bêta-carotène. Cultivée en Casamance." data-desc-en="Local sweet potato with orange flesh, sweet and rich in beta-carotene. Grown in Casamance."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p10.jpg" width="800" height="600" alt="Patate douce"></div>
+        </div>
+        <div class="card-body">
+          <h3>Patate douce</h3>
+          <span class="card-unit">sac de 20 kg · Producteurs Casamance</span>
+          <div class="card-price-row">
+            <span class="card-price">7 200 FCFA<br><small>sac de 20 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p10">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Huile de tournesol (p11) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p11" data-cat="huiles" data-price="22500"
+        data-name="Huile de tournesol" data-name-en="Sunflower oil"
+        data-unit="bidon 20 L" data-unit-en="20 L jerrycan"
+        data-supplier="Groupe Mimex Import"
+        data-desc="Huile de tournesol raffinée, bidon de 20 L, adaptée à la friture et à la cuisine quotidienne des restaurants et ménages." data-desc-en="Refined sunflower oil, 20 L jerrycan, suited for frying and everyday cooking in restaurants and households."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p11.jpg" width="800" height="600" alt="Huile de tournesol"></div>
+        </div>
+        <div class="card-body">
+          <h3>Huile de tournesol</h3>
+          <span class="card-unit">bidon 20 L · Groupe Mimex Import</span>
+          <div class="card-price-row">
+            <span class="card-price">22 500 FCFA<br><small>bidon 20 L</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p11">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Concentré de tomate (p12) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p12" data-cat="huiles" data-price="14200"
+        data-name="Concentré de tomate" data-name-en="Tomato paste"
+        data-unit="carton de 24 boîtes" data-unit-en="carton of 24 cans"
+        data-supplier="Groupe Mimex Import"
+        data-desc="Concentré de tomate en boîtes, base indispensable des sauces sénégalaises. Carton de 24 boîtes pour un usage professionnel ou familial." data-desc-en="Canned tomato paste, an essential base for Senegalese sauces. Carton of 24 cans for professional or family use."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p12.jpg" width="800" height="600" alt="Concentré de tomate"></div>
+        </div>
+        <div class="card-body">
+          <h3>Concentré de tomate</h3>
+          <span class="card-unit">carton de 24 boîtes · Groupe Mimex Import</span>
+          <div class="card-price-row">
+            <span class="card-price">14 200 FCFA<br><small>carton de 24 boîtes</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p12">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Sel fin iodé (p13) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p13" data-cat="huiles" data-price="4200"
+        data-name="Sel fin iodé" data-name-en="Fine iodised salt"
+        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
+        data-supplier="Salines de Kaolack"
+        data-desc="Sel fin iodé extrait des salines de Kaolack, conditionné en sac de 25 kg pour un usage domestique ou professionnel." data-desc-en="Fine iodised salt from the Kaolack salt flats, packed in 25 kg bags for household or professional use."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p13.jpg" width="800" height="600" alt="Sel fin iodé"></div>
+        </div>
+        <div class="card-body">
+          <h3>Sel fin iodé</h3>
+          <span class="card-unit">sac de 25 kg · Salines de Kaolack</span>
+          <div class="card-price-row">
+            <span class="card-price">4 200 FCFA<br><small>sac de 25 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p13">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Cube d'assaisonnement (p14) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p14" data-cat="huiles" data-price="8600"
+        data-name="Cube d'assaisonnement" data-name-en="Seasoning cubes"
+        data-unit="carton (100 unités)" data-unit-en="carton (100 units)"
+        data-supplier="Groupe Mimex Import"
+        data-desc="Cubes d'assaisonnement multi-usages pour bouillons, sauces et grillades. Carton de 100 unités." data-desc-en="Multi-purpose seasoning cubes for broths, sauces and grilling. Carton of 100 units."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p14.jpg" width="800" height="600" alt="Cube d'assaisonnement"></div>
+        </div>
+        <div class="card-body">
+          <h3>Cube d'assaisonnement</h3>
+          <span class="card-unit">carton (100 unités) · Groupe Mimex Import</span>
+          <div class="card-price-row">
+            <span class="card-price">8 600 FCFA<br><small>carton (100 unités)</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p14">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Poisson fumé (kéthiakh) (p15) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p15" data-cat="poissons" data-price="18500"
+        data-name="Poisson fumé (kéthiakh)" data-name-en="Smoked fish (kéthiakh)"
+        data-unit="carton de 10 kg" data-unit-en="10 kg carton"
+        data-supplier="Coopérative Pêche Kayar"
+        data-desc="Poisson fumé traditionnel (kéthiakh), fumage artisanal selon les méthodes des transformatrices de Kayar. Carton de 10 kg." data-desc-en="Traditional smoked fish (kéthiakh), artisanal smoking following the methods of Kayar's fish processors. 10 kg carton."
+        data-badge="Frais du jour" data-badge-en="Fresh today">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p15.jpg" width="800" height="600" alt="Poisson fumé (kéthiakh)"></div>
+        <span class="tag-badge">Frais du jour</span>
+        </div>
+        <div class="card-body">
+          <h3>Poisson fumé (kéthiakh)</h3>
+          <span class="card-unit">carton de 10 kg · Coopérative Pêche Kayar</span>
+          <div class="card-price-row">
+            <span class="card-price">18 500 FCFA<br><small>carton de 10 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p15">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Thiof frais (p16) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p16" data-cat="poissons" data-price="3200"
+        data-name="Thiof frais" data-name-en="Fresh grouper (thiof)"
+        data-unit="kg" data-unit-en="kg"
+        data-supplier="Coopérative Pêche Kayar"
+        data-desc="Thiof frais pêché au large de Kayar, poisson noble incontournable du tiéboudieune. Vendu au kilo, glacé à la livraison." data-desc-en="Fresh grouper (thiof) caught off Kayar, the noble fish at the heart of tiéboudieune. Sold by the kilo, iced on delivery."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p16.jpg" width="800" height="600" alt="Thiof frais"></div>
+        </div>
+        <div class="card-body">
+          <h3>Thiof frais</h3>
+          <span class="card-unit">kg · Coopérative Pêche Kayar</span>
+          <div class="card-price-row">
+            <span class="card-price">3 200 FCFA<br><small>kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p16">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Yaboye (sardinelle) (p17) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p17" data-cat="poissons" data-price="9500"
+        data-name="Yaboye (sardinelle)" data-name-en="Fresh sardinella (yaboye)"
+        data-unit="caisse de 15 kg" data-unit-en="15 kg crate"
+        data-supplier="Coopérative Pêche Mbour"
+        data-desc="Yaboye (sardinelle) frais issu de la pêche artisanale de Mbour, vendu en caisse de 15 kg." data-desc-en="Fresh sardinella (yaboye) from small-scale fishing in Mbour, sold in 15 kg crates."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p17.jpg" width="800" height="600" alt="Yaboye (sardinelle)"></div>
+        </div>
+        <div class="card-body">
+          <h3>Yaboye (sardinelle)</h3>
+          <span class="card-unit">caisse de 15 kg · Coopérative Pêche Mbour</span>
+          <div class="card-price-row">
+            <span class="card-price">9 500 FCFA<br><small>caisse de 15 kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p17">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Poulet local (p18) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p18" data-cat="volailles" data-price="3800"
+        data-name="Poulet local" data-name-en="Free-range chicken"
+        data-unit="unité vivant" data-unit-en="live unit"
+        data-supplier="Aviculture Thiès"
+        data-desc="Poulet local élevé en plein air à Thiès, vendu vivant à l'unité selon la tradition." data-desc-en="Local free-range chicken raised in Thiès, sold live per unit in the traditional way."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p18.jpg" width="800" height="600" alt="Poulet local"></div>
+        </div>
+        <div class="card-body">
+          <h3>Poulet local</h3>
+          <span class="card-unit">unité vivant · Aviculture Thiès</span>
+          <div class="card-price-row">
+            <span class="card-price">3 800 FCFA<br><small>unité vivant</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p18">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Poulet de chair (p19) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p19" data-cat="volailles" data-price="32000"
+        data-name="Poulet de chair" data-name-en="Broiler chicken"
+        data-unit="carton de 10" data-unit-en="carton of 10"
+        data-supplier="Aviculture Thiès"
+        data-desc="Poulet de chair, élevage intensif contrôlé, prêt à cuisiner. Conditionné en carton de 10 unités pour restaurants et revendeurs." data-desc-en="Broiler chicken, controlled intensive farming, ready to cook. Packed in cartons of 10 for restaurants and resellers."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p19.jpg" width="800" height="600" alt="Poulet de chair"></div>
+        </div>
+        <div class="card-body">
+          <h3>Poulet de chair</h3>
+          <span class="card-unit">carton de 10 · Aviculture Thiès</span>
+          <div class="card-price-row">
+            <span class="card-price">32 000 FCFA<br><small>carton de 10</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p19">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== PRODUIT : Viande de mouton (p20) =====
+           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
+           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
+           puis changez data-id (doit être unique sur tout le site) et le contenu.
+           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
+      <article class="product-card"
+        data-id="p20" data-cat="volailles" data-price="4200"
+        data-name="Viande de mouton" data-name-en="Mutton"
+        data-unit="kg" data-unit-en="kg"
+        data-supplier="Boucherie Grand Marché"
+        data-desc="Viande de mouton fraîche, découpe sur demande, issue de la Boucherie du Grand Marché. Vendue au kilo." data-desc-en="Fresh mutton, cut to order, from the Grand Marché butchery. Sold by the kilo."
+        data-badge="" data-badge-en="">
+        <div class="card-media">
+          <div class="img-style scale-img"><img src="images/products/p20.jpg" width="800" height="600" alt="Viande de mouton"></div>
+        </div>
+        <div class="card-body">
+          <h3>Viande de mouton</h3>
+          <span class="card-unit">kg · Boucherie Grand Marché</span>
+          <div class="card-price-row">
+            <span class="card-price">4 200 FCFA<br><small>kg</small></span>
+            <button class="btn btn-primary btn-sm" data-add="p20">Ajouter</button>
+          </div>
+        </div>
+      </article>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand"><img class="brand-mark" src="images/logo/logo.svg" width="48" height="48" alt="Karramna Agro"><span>Karramna Agro</span></div>
+          <p data-i18n="footer.desc">Marketplace agroalimentaire, filiale du Groupe Mimex. Nous facilitons l'approvisionnement des ménages, restaurants et commerces à Dakar et sa banlieue.</p>
+          <div class="social-row">
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 8h2V5h-2a4 4 0 0 0-4 4v2H9v3h2v7h3v-7h2.5l.5-3H14V9a1 1 0 0 1 1-1Z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.2"/><circle cx="16.2" cy="7.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l1.4-4.2A8 8 0 1 1 9 18.6L4 20Z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.navTitle">Navigation</h4>
+          <ul>
+            <li><a href="catalogue.html" data-i18n="nav.catalogue">Catalogue produits</a></li>
+            <li><a href="packs.html" data-i18n="nav.packs">Packs & Kits</a></li>
+            <li><a href="apropos.html" data-i18n="nav.about">À propos</a></li>
+            <li><a href="https://credit.karramna-agro.sn" class="nano-credit-link" target="_blank" rel="noopener" data-i18n="nav.nanoCredit">Nano Crédit</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.catTitle">Catégories</h4>
+          <ul>
+            <li><a href="catalogue.html?cat=cereales" data-i18n="categories.cereales">Céréales</a></li>
+            <li><a href="catalogue.html?cat=legumes" data-i18n="categories.legumes">Légumes</a></li>
+            <li><a href="catalogue.html?cat=tubercules" data-i18n="categories.tubercules">Tubercules</a></li>
+            <li><a href="catalogue.html?cat=huiles" data-i18n="categories.huiles">Huiles & condiments</a></li>
+            <li><a href="catalogue.html?cat=poissons" data-i18n="categories.poissons">Poissons</a></li>
+            <li><a href="catalogue.html?cat=volailles" data-i18n="categories.volailles">Volaille & viande</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.contactTitle">Contact</h4>
+          <p data-i18n="topbar.location">Pikine, Dakar — Sénégal</p>
+          <p>+221 77 000 00 00</p>
+          <p>contact@karramna-agro.sn</p>
+          <p data-i18n="footer.hours">Lun – Sam, 8h – 19h</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="current-year"></span> Karramna Agro — <span data-i18n="footer.rights">Filiale du Groupe Mimex. Tous droits réservés.</span></span>
+        <span data-i18n="footer.madeIn">Conçu à Dakar 🇸🇳</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="whatsapp-float" aria-label="Nous écrire sur WhatsApp" data-i18n-aria="common.whatsappFloat" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.6 6.6 0 0 1-1.9-1.2 7 7 0 0 1-1.3-1.6c-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4a.5.5 0 0 0 0-.5c-.1-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.7 4.7 0 0 0 1 2.5 10.7 10.7 0 0 0 4.1 3.6c.6.2 1 .4 1.4.5a3.4 3.4 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 1.9 1.9 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3Z"/></svg>
+  </a>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
+

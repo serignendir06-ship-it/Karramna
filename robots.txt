@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /panier.html
+Sitemap: https://www.karramna-agro.sn/sitemap.xml
