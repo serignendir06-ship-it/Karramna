@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Karramna Agro — Programme fidélité (démo locale)</title>
+<style>
+  :root{
+    --green:#1F4D2E; --green-dark:#163A21;
+    --amber:#D9941F; --amber-light:#F2B14A;
+    --bg:#FAFAF7; --text:#27332C; --muted:#6E7A72;
+    --card:#FFFFFF; --card-alt:#F7F5EF; --border:rgba(0,0,0,.08);
+    --red:#DC2626; --red-bg:#FEF2F2;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0;font-size:14px;}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;font-size:13.5px;cursor:pointer;}
+  input,select{font-family:inherit;font-size:14px;}
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{width:250px;background:var(--green);color:#fff;position:fixed;left:0;top:0;bottom:0;display:flex;flex-direction:column;overflow-y:auto;}
+  .sidebar .brand{padding:26px 22px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;}
+  .sidebar .brand .logo{width:36px;height:36px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .sidebar .brand .names p:first-child{font-family:Georgia,serif;font-weight:700;font-size:14.5px;letter-spacing:.3px;margin:0;}
+  .sidebar .brand .names p:last-child{font-size:11px;color:rgba(255,255,255,.6);margin:2px 0 0;}
+  .sidebar nav{flex:1;padding:18px 12px;display:flex;flex-direction:column;gap:4px;}
+  .sidebar nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:rgba(255,255,255,.82);font-size:13.5px;transition:background .15s;}
+  .sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff;}
+  .sidebar nav a.active{background:var(--amber);color:var(--green);font-weight:600;}
+  .sidebar .foot{padding:18px 22px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.5);line-height:1.5;}
+  .sidebar .foot button{margin-top:10px;background:rgba(255,255,255,.1);border:none;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;}
+  .sidebar .foot button:hover{background:rgba(255,255,255,.18);}
+
+  .main{flex:1;margin-left:250px;padding:34px 40px;max-width:1360px;}
+  header.pagehead{margin-bottom:26px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  header.pagehead h1{font-size:25px;color:var(--green);font-weight:700;}
+  header.pagehead p{color:var(--muted);font-size:13.5px;margin:6px 0 0;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  .grid-3{grid-template-columns:2fr 1fr;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);} .grid-3,.grid-2{grid-template-columns:1fr;}}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .card-alt{background:var(--card-alt);}
+  .card-dark{background:var(--green);color:#fff;}
+  .stat-label{font-size:12.5px;color:rgba(0,0,0,.5);font-weight:500;margin:0 0 6px;display:flex;justify-content:space-between;align-items:center;}
+  .stat-value{font-size:25px;font-weight:600;line-height:1;margin:0;}
+  .stat-value small{font-size:12px;font-weight:400;color:rgba(0,0,0,.4);margin-left:4px;}
+  .tone-warning{background:#FDF0DC;} .tone-warning .stat-value{color:var(--amber);}
+  .tone-danger{background:var(--red-bg);} .tone-danger .stat-value{color:var(--red);}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{text-align:left;color:rgba(0,0,0,.4);font-weight:500;font-size:12.5px;padding:9px 14px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.015);}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:rgba(0,0,0,.015);}
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+
+  .badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:500;white-space:nowrap;}
+  .badge-gray{background:rgba(0,0,0,.06);color:rgba(0,0,0,.6);}
+  .badge-green{background:rgba(31,77,46,.1);color:var(--green);}
+  .badge-amber{background:rgba(217,148,31,.15);color:#8a5a00;}
+  .badge-red{background:#FEE2E2;color:#B91C1C;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-weight:500;border:none;transition:background .15s;}
+  .btn-primary{background:var(--green);color:#fff;}
+  .btn-primary:hover{background:var(--green-dark);}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-outline{background:#fff;border:1px solid var(--border);color:var(--text);}
+  .btn-outline:hover{background:rgba(0,0,0,.03);}
+  .btn-outline.active{background:var(--green);color:#fff;border-color:var(--green);}
+  .btn-text{background:none;border:none;color:var(--green);font-weight:500;padding:0;}
+  .btn-text:hover{text-decoration:underline;}
+  .btn-icon{background:none;border:1px solid var(--border);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:var(--text);}
+  .btn-icon:hover{background:rgba(0,0,0,.05);}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:500;color:rgba(0,0,0,.6);margin-bottom:6px;}
+  .field input,.field select{width:100%;padding:9px 12px;border-radius:9px;border:1px solid rgba(0,0,0,.12);}
+  .field input:focus,.field select:focus{outline:2px solid rgba(31,77,46,.18);border-color:var(--green);}
+
+  .searchbar{display:flex;gap:10px;margin-bottom:18px;}
+  .searchbar input[type=text]{flex:1;max-width:340px;padding:10px 12px 10px 34px;border-radius:9px;border:1px solid rgba(0,0,0,.12);background:#fff;}
+  .searchbar select{padding:10px 12px;border-radius:9px;border:1px solid rgba(0,0,0,.12);background:#fff;}
+  .search-wrap{position:relative;flex:1;max-width:340px;}
+  .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.35;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--border);}
+  .modal-head h3{font-size:15.5px;font-family:inherit;font-weight:600;}
+  .modal-body{padding:20px 22px;}
+
+  .pillrow{display:flex;gap:8px;margin-bottom:18px;}
+  .empty{text-align:center;color:rgba(0,0,0,.32);padding:40px 0;}
+  .muted{color:var(--muted);}
+  .progress{height:10px;background:rgba(0,0,0,.06);border-radius:99px;overflow:hidden;}
+  .progress-bar{height:100%;border-radius:99px;background:var(--green);}
+  .flex-between{display:flex;justify-content:space-between;align-items:center;}
+  .demo-tag{font-size:11px;color:rgba(0,0,0,.35);border:1px solid var(--border);padding:4px 10px;border-radius:99px;white-space:nowrap;}
+  .icon-circle{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .prodcard{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;text-align:left;background:#fff;width:100%;}
+  .prodcard:hover{border-color:var(--green);background:rgba(31,77,46,.02);}
+  .cart-line{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);}
+  .cart-line:last-child{border-bottom:none;}
+  .qty-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:#fff;display:inline-flex;align-items:center;justify-content:center;}
+  .decision-box{border-radius:10px;padding:13px 14px;margin-bottom:14px;font-size:12.5px;}
+  .decision-box .dtitle{font-weight:600;font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+  .sticky{position:sticky;top:20px;}
+  .tier-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:600;}
+  .tier-0{background:rgba(0,0,0,.06);color:rgba(0,0,0,.55);}
+  .tier-1{background:rgba(217,148,31,.15);color:#8a5a00;}
+  .tier-2{background:rgba(31,77,46,.12);color:var(--green);}
+  .tier-3{background:rgba(31,77,46,.9);color:#fff;}
+  .points-chip{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--amber);}
+  .reward-card{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:8px;}
+  .reward-card.inactive{opacity:.5;}
+  .tier-track{display:flex;gap:4px;margin:10px 0;}
+  .tier-track span{flex:1;height:8px;border-radius:99px;background:rgba(0,0,0,.08);}
+  .tier-track span.done{background:var(--amber);}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   KARRAMNA AGRO — Plateforme Programme Fidélité (version HTML autonome)
+   Aucun serveur requis : toute la logique (points, paliers, récompenses)
+   tourne dans le navigateur, les données sont stockées dans localStorage.
+   Application séparée du site marketplace, sur le même principe que NAKA.
+   ========================================================================= */
+
+/* ---------- Icônes (SVG inline, style Feather) ---------- */
+const ICONS = {
+  dashboard:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>',
+  users:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  star:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.3 6.9.9-5 4.9 1.2 6.9-6-3.3-6 3.3 1.2-6.9-5-4.9 6.9-.9L12 2Z"/></svg>',
+  gift:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9"/><path d="M12 8c-1.5 0-3-1.2-3-3s1.5-3 3-1.5C13.5 5 15 6.5 15 8"/><path d="M12 8c1.5 0 3-1.2 3-3s-1.5-3-3-1.5C10.5 5 9 6.5 9 8"/></svg>',
+  settings:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  search:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+  plus:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>',
+  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  arrowLeft:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+  alert:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>',
+  phone:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>',
+  pin:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  calendar:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  edit:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/></svg>',
+  trendUp:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>',
+};
+
+/* ---------- Formatage ---------- */
+const fmtFCFA = n => Math.round(n).toLocaleString('fr-FR') + ' FCFA';
+const fmtPts = n => Math.round(n).toLocaleString('fr-FR') + ' pts';
+const fmtDate = iso => new Date(iso).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+const TYPE_LABELS = { restaurant:'Restaurant', gargote:'Gargote', tanganaa:'Tanganaa', dibiterie:'Dibiterie', menage:'Ménage', hotel:'Hôtel' };
+
+/* ---------- Moteur du programme fidélité ---------- */
+// Règles par défaut : 1 point par tranche de 1000 FCFA dépensée, 50 points
+// offerts à l'inscription. Les paliers ci-dessous reprennent exactement ceux
+// affichés sur le site marketplace (À propos / Mon compte).
+const PALIERS_DEFAUT = [
+  { id:0, nom:'Découverte',  min:0,    max:499,  avantage:"Cumul des points sur chaque commande, dès l'inscription." },
+  { id:1, nom:'Fidèle',      min:500,  max:1499, avantage:'-1 000 FCFA offerts sur la prochaine commande.' },
+  { id:2, nom:'Ambassadeur', min:1500, max:null, avantage:'Livraison gratuite illimitée et offres exclusives.' },
+];
+
+function getSettings(db){
+  return db.settings || { pointsPour1000:1, bonusBienvenue:50, paliers:PALIERS_DEFAUT };
+}
+function palierDe(db, points){
+  const paliers = getSettings(db).paliers;
+  for(let i=paliers.length-1;i>=0;i--){
+    if(points >= paliers[i].min) return paliers[i];
+  }
+  return paliers[0];
+}
+function pointsPourPalierSuivant(db, points){
+  const paliers = getSettings(db).paliers;
+  const actuel = palierDe(db, points);
+  const idx = paliers.findIndex(p=>p.id===actuel.id);
+  const suivant = paliers[idx+1];
+  if(!suivant) return null;
+  return { suivant, restant: Math.max(0, suivant.min - points) };
+}
+function calculerPoints(db, montantFCFA){
+  return Math.floor((montantFCFA/1000) * getSettings(db).pointsPour1000);
+}
+function newId(p){ return p+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+
+function creerMembre(db, data){
+  const membre = {
+    id:newId('mem'), nom:data.nom, telephone:data.telephone, quartier:data.quartier,
+    type_structure:data.type_structure||'menage', date_inscription:new Date().toISOString(),
+    points:getSettings(db).bonusBienvenue, statut:'actif'
+  };
+  db.membres.push(membre);
+  db.transactions.push({ id:newId('tx'), membre_id:membre.id, type:'bonus', points:membre.points,
+    montant_fcfa:0, libelle:'Bonus de bienvenue', date:membre.date_inscription });
+  save(db);
+  return membre;
+}
+function enregistrerAchat(db, membreId, montantFCFA, note){
+  const membre = db.membres.find(m=>m.id===membreId);
+  if(!membre) throw new Error('Membre introuvable');
+  const pts = calculerPoints(db, montantFCFA);
+  membre.points += pts;
+  db.transactions.unshift({ id:newId('tx'), membre_id:membreId, type:'gain', points:pts,
+    montant_fcfa:montantFCFA, libelle:note || 'Commande', date:new Date().toISOString() });
+  save(db);
+  return pts;
+}
+function echangerRecompense(db, membreId, rewardId){
+  const membre = db.membres.find(m=>m.id===membreId);
+  const reward = db.recompenses.find(r=>r.id===rewardId);
+  if(!membre || !reward) throw new Error('Membre ou récompense introuvable');
+  if(membre.points < reward.cout_points) throw new Error('Points insuffisants');
+  membre.points -= reward.cout_points;
+  db.transactions.unshift({ id:newId('tx'), membre_id:membreId, type:'echange', points:-reward.cout_points,
+    reward_id:reward.id, libelle:'Échange : ' + reward.nom, date:new Date().toISOString() });
+  save(db);
+}
+function ajusterPoints(db, membreId, delta, motif){
+  const membre = db.membres.find(m=>m.id===membreId);
+  if(!membre) throw new Error('Membre introuvable');
+  membre.points = Math.max(0, membre.points + delta);
+  db.transactions.unshift({ id:newId('tx'), membre_id:membreId, type:'ajustement', points:delta,
+    libelle:motif || 'Ajustement manuel', date:new Date().toISOString() });
+  save(db);
+}
+
+/* ---------- Persistance (localStorage) ---------- */
+const STORAGE_KEY = 'karramna_fidelite_db_v1';
+function save(db){ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
+function load(){ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+function joursDepuis(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString(); }
+
+function seedDemoData(){
+  const settings = { pointsPour1000:1, bonusBienvenue:50, paliers:PALIERS_DEFAUT };
+
+  const recompenses = [
+    { id:newId('rw'), nom:'-1 000 FCFA sur commande', description:'Réduction immédiate sur le total du panier.', cout_points:500, categorie:'Réduction', actif:true },
+    { id:newId('rw'), nom:'Livraison gratuite', description:"Frais de livraison offerts, quelle que soit la zone.", cout_points:250, categorie:'Livraison', actif:true },
+    { id:newId('rw'), nom:'-2 500 FCFA sur commande', description:'Réduction immédiate sur le total du panier.', cout_points:1200, categorie:'Réduction', actif:true },
+    { id:newId('rw'), nom:'Sac de riz 5kg offert', description:'Un sac de riz brisé parfumé offert avec votre prochaine commande.', cout_points:900, categorie:'Cadeau', actif:true },
+    { id:newId('rw'), nom:'Pack découverte offert', description:'Un pack de saison au choix, offert intégralement.', cout_points:2500, categorie:'Cadeau', actif:true },
+    { id:newId('rw'), nom:'-5% sur la prochaine commande', description:'Remise en pourcentage, cumulable une fois par mois.', cout_points:1800, categorie:'Réduction', actif:false },
+  ];
+
+  const membresSeed = [
+    { nom:'Restaurant Chez Awa', type_structure:'restaurant', quartier:'Parcelles Assainies', telephone:'77 123 45 01', joursInscription:180, achats:[[15,320000],[60,280000],[95,250000],[130,120000],[160,100000]] },
+    { nom:'Gargote Fatou Diop', type_structure:'gargote', quartier:'Pikine', telephone:'77 123 45 02', joursInscription:120, achats:[[8,220000],[40,150000],[75,120000]] },
+    { nom:'Tanganaa Rue 12', type_structure:'tanganaa', quartier:'Grand Yoff', telephone:'77 123 45 03', joursInscription:70, achats:[[5,9800],[35,14200]] },
+    { nom:'Dibiterie Ndiaye', type_structure:'dibiterie', quartier:'Pikine', telephone:'77 123 45 04', joursInscription:25, achats:[[3,12500]] },
+    { nom:'Restaurant Le Baobab', type_structure:'restaurant', quartier:'Grand Yoff', telephone:'77 123 45 05', joursInscription:95, achats:[[10,180000],[50,190000],[85,130000]] },
+    { nom:'Amina Sarr (ménage)', type_structure:'menage', quartier:'Sicap Liberté', telephone:'77 123 45 06', joursInscription:40, achats:[[6,8500],[28,11200]] },
+    { nom:'Gargote Sokhna', type_structure:'gargote', quartier:'Parcelles Assainies', telephone:'77 123 45 07', joursInscription:12, achats:[] },
+    { nom:'Hôtel Teranga Plage', type_structure:'hotel', quartier:'Almadies', telephone:'77 123 45 08', joursInscription:150, achats:[[20,420000],[65,430000],[110,380000],[140,370000]] },
+  ];
+
+  const membres = [], transactions = [];
+  membresSeed.forEach(function(s){
+    const id = newId('mem');
+    const dateInscription = joursDepuis(s.joursInscription);
+    let points = settings.bonusBienvenue;
+    transactions.push({ id:newId('tx'), membre_id:id, type:'bonus', points:settings.bonusBienvenue,
+      montant_fcfa:0, libelle:'Bonus de bienvenue', date:dateInscription });
+    s.achats.forEach(function(a){
+      const jours = a[0], montant = a[1];
+      const pts = Math.floor((montant/1000)*settings.pointsPour1000);
+      points += pts;
+      transactions.push({ id:newId('tx'), membre_id:id, type:'gain', points:pts, montant_fcfa:montant,
+        libelle:'Commande', date:joursDepuis(jours) });
+    });
+    membres.push({ id:id, nom:s.nom, telephone:s.telephone, quartier:s.quartier, type_structure:s.type_structure,
+      date_inscription:dateInscription, points:points, statut:'actif' });
+  });
+
+  // Un échange déjà effectué pour illustrer l'historique
+  const awa = membres.find(m=>m.nom==='Restaurant Chez Awa');
+  const reward = recompenses[0];
+  if(awa.points >= reward.cout_points){
+    awa.points -= reward.cout_points;
+    transactions.unshift({ id:newId('tx'), membre_id:awa.id, type:'echange', points:-reward.cout_points,
+      reward_id:reward.id, libelle:'Échange : ' + reward.nom, date:joursDepuis(2) });
+  }
+
+  transactions.sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+
+  return { membres:membres, recompenses:recompenses, transactions:transactions, settings:settings };
+}
+
+function getDb(){
+  let db = load();
+  if(!db){ db = seedDemoData(); save(db); }
+  return db;
+}
+function resetDemoData(){
+  if(!confirm('Réinitialiser toutes les données de démonstration ? Vos modifications seront perdues.')) return;
+  const db = seedDemoData(); save(db); navigate('#/');
+  render();
+}
+
+/* ---------- Router ---------- */
+function navigate(hash){ location.hash = hash; }
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', render);
+
+const NAV = [
+  {href:'#/', label:'Tableau de bord', icon:'dashboard'},
+  {href:'#/membres', label:'Membres', icon:'users'},
+  {href:'#/transactions', label:'Nouvelle transaction', icon:'star'},
+  {href:'#/recompenses', label:'Récompenses', icon:'gift'},
+  {href:'#/parametres', label:'Paramètres', icon:'settings'},
+];
+
+function layout(activeHref, content){
+  return '<div class="app">' +
+    '<aside class="sidebar">' +
+      '<div class="brand"><div class="logo">' + ICONS.star + '</div>' +
+      '<div class="names"><p>KARRAMNA AGRO</p><p>Programme fidélité</p></div></div>' +
+      '<nav>' + NAV.map(function(n){ return '<a href="'+n.href+'" class="'+(activeHref===n.href?'active':'')+'">'+ICONS[n.icon]+n.label+'</a>'; }).join('') + '</nav>' +
+      '<div class="foot">Version HTML autonome — données stockées dans ce navigateur uniquement.<br><button onclick="resetDemoData()">Réinitialiser les données</button></div>' +
+    '</aside>' +
+    '<main class="main">' + content + '</main>' +
+  '</div>';
+}
+
+function render(){
+  const hash = location.hash || '#/';
+  const db = getDb();
+  const app = document.getElementById('app');
+  const parts = hash.split('/');
+  const membreId = parts[2];
+
+  if(hash==='#/' || hash===''){ app.innerHTML = layout('#/', pageDashboard(db)); }
+  else if(hash==='#/membres'){ app.innerHTML = layout('#/membres', pageMembres(db)); attachMembresEvents(db); }
+  else if(hash.indexOf('#/membres/')===0){ app.innerHTML = layout('#/membres', pageMembreDetail(db, membreId)); attachMembreDetailEvents(db, membreId); }
+  else if(hash==='#/transactions'){ app.innerHTML = layout('#/transactions', pageTransactions(db)); attachTransactionsEvents(db); }
+  else if(hash==='#/recompenses'){ app.innerHTML = layout('#/recompenses', pageRecompenses(db)); attachRecompensesEvents(db); }
+  else if(hash==='#/parametres'){ app.innerHTML = layout('#/parametres', pageParametres(db)); attachParametresEvents(db); }
+  else { app.innerHTML = layout('#/', pageDashboard(db)); }
+}
+
+/* ---------- Statistiques agrégées ---------- */
+function getStats(db){
+  const now = new Date();
+  const trente = new Date(now); trente.setDate(trente.getDate()-30);
+  const membresActifs = db.membres.filter(m=>m.statut==='actif').length;
+  const pointsCirculation = db.membres.reduce((s,m)=>s+m.points,0);
+  const txRecentes = db.transactions.filter(t=>new Date(t.date) >= trente);
+  const pointsDistribues30j = txRecentes.filter(t=>t.type==='gain'||t.type==='bonus').reduce((s,t)=>s+t.points,0);
+  const echanges30j = txRecentes.filter(t=>t.type==='echange').length;
+
+  // Répartition par palier
+  const paliers = getSettings(db).paliers;
+  const repartition = paliers.map(function(p){
+    return { palier:p, count: db.membres.filter(m=>palierDe(db,m.points).id===p.id).length };
+  });
+
+  // Évolution des points distribués par mois (6 derniers mois)
+  const mois = [];
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = d.toISOString().slice(0,7);
+    const label = d.toLocaleDateString('fr-FR', {month:'short', year:'2-digit'});
+    const total = db.transactions.filter(function(t){
+      return (t.type==='gain'||t.type==='bonus') && t.date.slice(0,7)===key;
+    }).reduce((s,t)=>s+t.points,0);
+    mois.push({ label:label, total:total });
+  }
+
+  return { membresActifs, pointsCirculation, pointsDistribues30j, echanges30j, repartition, mois };
+}
+
+/* ---------- Page : Tableau de bord ---------- */
+function pageDashboard(db){
+  const s = getStats(db);
+  const maxMois = Math.max.apply(null, [1].concat(s.mois.map(m=>m.total)));
+  const maxRepartition = Math.max.apply(null, [1].concat(s.repartition.map(r=>r.count)));
+  const dernieres = db.transactions.slice(0,6);
+
+  let html = '<header class="pagehead"><div><h1>Tableau de bord</h1><p>Vue d\'ensemble du programme de fidélité</p></div>' +
+    '<span class="demo-tag">Démo locale — navigateur</span></header>';
+
+  html += '<div class="grid grid-4" style="margin-bottom:16px;">' +
+    '<div class="card"><p class="stat-label">Membres actifs</p><p class="stat-value">'+s.membresActifs+'</p></div>' +
+    '<div class="card"><p class="stat-label">Points en circulation</p><p class="stat-value">'+fmtPts(s.pointsCirculation)+'</p></div>' +
+    '<div class="card tone-warning"><p class="stat-label">Points distribués <small>(30j)</small></p><p class="stat-value">'+fmtPts(s.pointsDistribues30j)+'</p></div>' +
+    '<div class="card"><p class="stat-label">Récompenses échangées <small>(30j)</small></p><p class="stat-value">'+s.echanges30j+'</p></div>' +
+  '</div>';
+
+  html += '<div class="grid grid-3" style="margin-bottom:16px;">' +
+    '<div class="card"><h3 style="font-size:14.5px;margin-bottom:14px;">Évolution des points distribués</h3>' +
+      '<p class="muted" style="font-size:12.5px;margin-bottom:14px;">Points gagnés par les membres, par mois</p>' +
+      '<div style="display:flex;align-items:flex-end;gap:14px;height:150px;">' +
+      s.mois.map(function(m){
+        const h = Math.max(4, Math.round((m.total/maxMois)*130));
+        return '<div style="flex:1;text-align:center;"><div class="muted" style="font-size:11px;margin-bottom:4px;">'+(m.total?fmtPts(m.total):'')+'</div>' +
+          '<div style="height:'+h+'px;background:var(--green);border-radius:4px 4px 0 0;"></div>' +
+          '<div class="muted" style="font-size:11px;margin-top:6px;">'+m.label+'</div></div>';
+      }).join('') +
+      '</div>' +
+    '</div>' +
+    '<div class="card"><h3 style="font-size:14.5px;margin-bottom:14px;">Répartition par palier</h3>' +
+      '<p class="muted" style="font-size:12.5px;margin-bottom:14px;">Nombre de membres</p>' +
+      s.repartition.map(function(r){
+        const pct = Math.round((r.count/maxRepartition)*100);
+        return '<div style="margin-bottom:12px;"><div class="flex-between" style="margin-bottom:5px;font-size:12.5px;">' +
+          '<span class="tier-pill tier-'+r.palier.id+'">'+r.palier.nom+'</span><span class="muted">'+r.count+'</span></div>' +
+          '<div class="progress"><div class="progress-bar" style="width:'+pct+'%;background:'+(r.palier.id===0?'rgba(0,0,0,.25)':r.palier.id===1?'var(--amber)':'var(--green)')+';"></div></div></div>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+
+  html += '<div class="table-wrap"><div style="padding:16px 18px 4px;" class="flex-between"><h3 style="font-size:14.5px;">Dernières transactions</h3>' +
+    '<a href="#/transactions" class="btn-text">Nouvelle transaction →</a></div>' +
+    '<table><thead><tr><th>Membre</th><th>Type</th><th>Points</th><th>Détail</th><th>Date</th></tr></thead><tbody>';
+  if(!dernieres.length){ html += '<tr><td colspan="5"><div class="empty">Aucune transaction pour le moment.</div></td></tr>'; }
+  dernieres.forEach(function(t){
+    const membre = db.membres.find(m=>m.id===t.membre_id);
+    const badge = t.type==='gain' ? '<span class="badge badge-green">Gain</span>' :
+      t.type==='bonus' ? '<span class="badge badge-amber">Bonus</span>' :
+      t.type==='echange' ? '<span class="badge badge-gray">Échange</span>' : '<span class="badge badge-gray">Ajustement</span>';
+    const pts = (t.points>=0?'+':'') + fmtPts(t.points);
+    html += '<tr><td>'+(membre?membre.nom:'—')+'</td><td>'+badge+'</td>' +
+      '<td style="font-weight:600;color:'+(t.points>=0?'var(--green)':'var(--red)')+';">'+pts+'</td>' +
+      '<td class="muted">'+t.libelle+'</td><td class="muted">'+fmtDate(t.date)+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+
+  return html;
+}
+
+/* ---------- Page : Membres ---------- */
+function pageMembres(db){
+  let html = '<header class="pagehead"><div><h1>Membres</h1><p>'+db.membres.length+' membres inscrits au programme fidélité</p></div>' +
+    '<a href="#/transactions" class="btn btn-primary">'+ICONS.plus+'Nouveau membre / transaction</a></header>';
+
+  html += '<div class="searchbar">' +
+    '<div class="search-wrap">'+ICONS.search+'<input type="text" id="searchMembre" placeholder="Rechercher un membre, un quartier..."></div>' +
+    '<select id="filterPalier"><option value="">Tous les paliers</option>' +
+    getSettings(db).paliers.map(p=>'<option value="'+p.id+'">'+p.nom+'</option>').join('') + '</select>' +
+  '</div>';
+
+  html += '<div class="table-wrap"><table><thead><tr><th>Membre</th><th>Type</th><th>Quartier</th><th>Palier</th><th>Points</th><th>Inscrit le</th><th></th></tr></thead>' +
+    '<tbody id="membresTbody">' + renderMembresRows(db, db.membres) + '</tbody></table></div>';
+  return html;
+}
+function renderMembresRows(db, membres){
+  if(!membres.length) return '<tr><td colspan="7"><div class="empty">Aucun membre ne correspond à votre recherche.</div></td></tr>';
+  return membres.map(function(m){
+    const palier = palierDe(db, m.points);
+    return '<tr style="cursor:pointer;" onclick="navigate(\'#/membres/'+m.id+'\')">' +
+      '<td style="font-weight:600;">'+m.nom+'</td>' +
+      '<td class="muted">'+(TYPE_LABELS[m.type_structure]||m.type_structure)+'</td>' +
+      '<td class="muted">'+m.quartier+'</td>' +
+      '<td><span class="tier-pill tier-'+palier.id+'">'+palier.nom+'</span></td>' +
+      '<td class="points-chip">'+ICONS.star+fmtPts(m.points)+'</td>' +
+      '<td class="muted">'+fmtDate(m.date_inscription)+'</td>' +
+      '<td><button class="btn-icon" onclick="event.stopPropagation();navigate(\'#/membres/'+m.id+'\')">'+ICONS.arrowLeft.replace('M19 12H5M12 19l-7-7 7-7','M5 12h14M12 5l7 7-7 7')+'</button></td>' +
+    '</tr>';
+  }).join('');
+}
+function attachMembresEvents(db){
+  function apply(){
+    const q = (document.getElementById('searchMembre').value||'').toLowerCase();
+    const palier = document.getElementById('filterPalier').value;
+    let list = db.membres.filter(function(m){
+      const matchQ = !q || m.nom.toLowerCase().includes(q) || m.quartier.toLowerCase().includes(q);
+      const matchP = !palier || String(palierDe(db,m.points).id)===palier;
+      return matchQ && matchP;
+    });
+    document.getElementById('membresTbody').innerHTML = renderMembresRows(db, list);
+  }
+  document.getElementById('searchMembre').addEventListener('input', apply);
+  document.getElementById('filterPalier').addEventListener('change', apply);
+}
+
+/* ---------- Page : Fiche membre ---------- */
+function pageMembreDetail(db, membreId){
+  const m = db.membres.find(x=>x.id===membreId);
+  if(!m) return '<div class="empty">Membre introuvable.</div>';
+  const palier = palierDe(db, m.points);
+  const suivant = pointsPourPalierSuivant(db, m.points);
+  const paliers = getSettings(db).paliers;
+  const idxPalier = paliers.findIndex(p=>p.id===palier.id);
+  const tx = db.transactions.filter(t=>t.membre_id===membreId);
+
+  let html = '<a href="#/membres" class="btn-text" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;">'+ICONS.arrowLeft+'Retour aux membres</a>';
+
+  html += '<div class="grid grid-3">';
+  html += '<div>';
+  html += '<div class="card" style="margin-bottom:16px;">' +
+    '<div class="flex-between" style="align-items:flex-start;margin-bottom:14px;">' +
+      '<div><h2 style="font-size:19px;color:var(--green);">'+m.nom+'</h2>' +
+      '<p class="muted" style="font-size:12.5px;margin-top:4px;">'+(TYPE_LABELS[m.type_structure]||m.type_structure)+' · '+ICONS.pin+' '+m.quartier+'</p></div>' +
+      '<span class="tier-pill tier-'+palier.id+'">'+palier.nom+'</span>' +
+    '</div>' +
+    '<p class="muted" style="font-size:13px;margin-bottom:4px;">'+ICONS.phone+' '+m.telephone+'</p>' +
+    '<p class="muted" style="font-size:13px;">'+ICONS.calendar+' Membre depuis le '+fmtDate(m.date_inscription)+'</p>' +
+  '</div>';
+
+  html += '<div class="card card-dark" style="margin-bottom:16px;">' +
+    '<p class="stat-label" style="color:rgba(255,255,255,.65);">Solde de points</p>' +
+    '<p class="stat-value" style="font-size:30px;">'+fmtPts(m.points)+'</p>' +
+    '<div class="tier-track">' + paliers.map((p,i)=>'<span class="'+(i<=idxPalier?'done':'')+'"></span>').join('') + '</div>' +
+    (suivant ? '<p style="font-size:12px;color:rgba(255,255,255,.75);">'+fmtPts(suivant.restant)+' avant le palier '+suivant.suivant.nom+'</p>'
+              : '<p style="font-size:12px;color:rgba(255,255,255,.75);">Palier maximal atteint 🎉</p>') +
+  '</div>';
+
+  html += '<div class="card"><h3 style="font-size:14px;margin-bottom:10px;">Ajuster les points</h3>' +
+    '<div class="field"><label>Montant à ajouter/retirer (points)</label><input type="number" id="ajustPoints" placeholder="ex : 100 ou -50"></div>' +
+    '<div class="field"><label>Motif</label><input type="text" id="ajustMotif" placeholder="ex : geste commercial"></div>' +
+    '<button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnAjuster">Valider l\'ajustement</button>' +
+  '</div>';
+  html += '</div>';
+
+  html += '<div style="grid-column:span 2;">';
+  html += '<div class="table-wrap"><div style="padding:16px 18px 4px;"><h3 style="font-size:14.5px;">Historique des transactions</h3></div>' +
+    '<table><thead><tr><th>Type</th><th>Points</th><th>Détail</th><th>Date</th></tr></thead><tbody>';
+  if(!tx.length){ html += '<tr><td colspan="4"><div class="empty">Aucune transaction pour ce membre.</div></td></tr>'; }
+  tx.forEach(function(t){
+    const badge = t.type==='gain' ? '<span class="badge badge-green">Gain</span>' :
+      t.type==='bonus' ? '<span class="badge badge-amber">Bonus</span>' :
+      t.type==='echange' ? '<span class="badge badge-gray">Échange</span>' : '<span class="badge badge-gray">Ajustement</span>';
+    const pts = (t.points>=0?'+':'') + fmtPts(t.points);
+    html += '<tr><td>'+badge+'</td><td style="font-weight:600;color:'+(t.points>=0?'var(--green)':'var(--red)')+';">'+pts+'</td>' +
+      '<td class="muted">'+t.libelle+(t.montant_fcfa?' ('+fmtFCFA(t.montant_fcfa)+')':'')+'</td><td class="muted">'+fmtDate(t.date)+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+function attachMembreDetailEvents(db, membreId){
+  const btn = document.getElementById('btnAjuster');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    const delta = parseInt(document.getElementById('ajustPoints').value, 10);
+    const motif = document.getElementById('ajustMotif').value;
+    if(!delta){ alert('Merci de saisir un nombre de points (positif ou négatif).'); return; }
+    ajusterPoints(db, membreId, delta, motif);
+    render();
+  });
+}
+
+/* ---------- Page : Nouvelle transaction ---------- */
+function pageTransactions(db){
+  let html = '<header class="pagehead"><div><h1>Nouvelle transaction</h1><p>Enregistrez un achat pour créditer des points, ou faites échanger une récompense</p></div></header>';
+
+  html += '<div class="grid grid-2">';
+
+  html += '<div class="card"><h3 style="font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">'+ICONS.trendUp+'Créditer des points (achat)</h3>' +
+    '<div class="field"><label>Membre</label><select id="txMembre">' +
+      '<option value="">Choisir un membre…</option>' +
+      db.membres.map(m=>'<option value="'+m.id+'">'+m.nom+' — '+fmtPts(m.points)+'</option>').join('') +
+    '</select></div>' +
+    '<div class="field"><label>Montant de la commande (FCFA)</label><input type="number" id="txMontant" placeholder="ex : 25000"></div>' +
+    '<div class="field"><label>Note (optionnel)</label><input type="text" id="txNote" placeholder="ex : commande #1234"></div>' +
+    '<div class="decision-box" style="background:var(--card-alt);" id="txApercu">'+ICONS.star+' Renseignez un montant pour voir les points calculés.</div>' +
+    '<button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnCrediter">Créditer les points</button>' +
+  '</div>';
+
+  html += '<div class="card"><h3 style="font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">'+ICONS.gift+'Échanger une récompense</h3>' +
+    '<div class="field"><label>Membre</label><select id="rwMembre">' +
+      '<option value="">Choisir un membre…</option>' +
+      db.membres.map(m=>'<option value="'+m.id+'">'+m.nom+' — '+fmtPts(m.points)+'</option>').join('') +
+    '</select></div>' +
+    '<div class="field"><label>Récompense</label><select id="rwChoice">' +
+      '<option value="">Choisir une récompense…</option>' +
+      db.recompenses.filter(r=>r.actif).map(r=>'<option value="'+r.id+'">'+r.nom+' — '+fmtPts(r.cout_points)+'</option>').join('') +
+    '</select></div>' +
+    '<div class="decision-box" style="background:var(--card-alt);" id="rwApercu">'+ICONS.gift+' Choisissez un membre et une récompense.</div>' +
+    '<button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnEchanger">Valider l\'échange</button>' +
+  '</div>';
+
+  html += '</div>';
+  return html;
+}
+function attachTransactionsEvents(db){
+  function updateApercu(){
+    const membreId = document.getElementById('txMembre').value;
+    const montant = parseFloat(document.getElementById('txMontant').value)||0;
+    const box = document.getElementById('txApercu');
+    if(!membreId || !montant){ box.innerHTML = ICONS.star+' Renseignez un membre et un montant pour voir les points calculés.'; return; }
+    const pts = calculerPoints(db, montant);
+    box.innerHTML = '<div class="dtitle" style="color:var(--green);">'+ICONS.check+' '+fmtPts(pts)+' seront crédités</div>' +
+      '<span class="muted">Base : '+getSettings(db).pointsPour1000+' point pour 1 000 FCFA dépensés.</span>';
+  }
+  document.getElementById('txMembre').addEventListener('change', updateApercu);
+  document.getElementById('txMontant').addEventListener('input', updateApercu);
+  document.getElementById('btnCrediter').addEventListener('click', function(){
+    const membreId = document.getElementById('txMembre').value;
+    const montant = parseFloat(document.getElementById('txMontant').value)||0;
+    const note = document.getElementById('txNote').value;
+    if(!membreId || !montant){ alert('Merci de choisir un membre et de saisir un montant.'); return; }
+    const pts = enregistrerAchat(db, membreId, montant, note);
+    alert(fmtPts(pts)+' crédités avec succès.');
+    render();
+  });
+
+  function updateRwApercu(){
+    const membreId = document.getElementById('rwMembre').value;
+    const rewardId = document.getElementById('rwChoice').value;
+    const box = document.getElementById('rwApercu');
+    if(!membreId || !rewardId){ box.innerHTML = ICONS.gift+' Choisissez un membre et une récompense.'; return; }
+    const membre = db.membres.find(m=>m.id===membreId);
+    const reward = db.recompenses.find(r=>r.id===rewardId);
+    if(membre.points >= reward.cout_points){
+      box.innerHTML = '<div class="dtitle" style="color:var(--green);">'+ICONS.check+' Échange possible</div>' +
+        '<span class="muted">Solde après échange : '+fmtPts(membre.points-reward.cout_points)+'</span>';
+    } else {
+      box.innerHTML = '<div class="dtitle" style="color:var(--red);">'+ICONS.alert+' Points insuffisants</div>' +
+        '<span class="muted">Il manque '+fmtPts(reward.cout_points-membre.points)+' à ce membre.</span>';
+    }
+  }
+  document.getElementById('rwMembre').addEventListener('change', updateRwApercu);
+  document.getElementById('rwChoice').addEventListener('change', updateRwApercu);
+  document.getElementById('btnEchanger').addEventListener('click', function(){
+    const membreId = document.getElementById('rwMembre').value;
+    const rewardId = document.getElementById('rwChoice').value;
+    if(!membreId || !rewardId){ alert('Merci de choisir un membre et une récompense.'); return; }
+    try{
+      echangerRecompense(db, membreId, rewardId);
+      alert('Échange enregistré avec succès.');
+      render();
+    }catch(e){ alert(e.message); }
+  });
+}
+
+/* ---------- Page : Récompenses ---------- */
+function pageRecompenses(db){
+  let html = '<header class="pagehead"><div><h1>Récompenses</h1><p>Catalogue des récompenses échangeables contre des points</p></div>' +
+    '<button class="btn btn-primary" id="btnNewReward">'+ICONS.plus+'Nouvelle récompense</button></header>';
+
+  html += '<div class="grid grid-4" id="rewardsGrid">' + db.recompenses.map(rewardCardHTML).join('') + '</div>';
+  return html;
+}
+function rewardCardHTML(r){
+  return '<div class="reward-card'+(r.actif?'':' inactive')+'">' +
+    '<div class="flex-between"><span class="badge badge-gray">'+r.categorie+'</span>' +
+    (r.actif? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-gray">Inactive</span>') + '</div>' +
+    '<h3 style="font-size:14.5px;">'+r.nom+'</h3>' +
+    '<p class="muted" style="font-size:12.5px;flex:1;">'+r.description+'</p>' +
+    '<div class="flex-between"><span class="points-chip">'+ICONS.star+fmtPts(r.cout_points)+'</span>' +
+    '<button class="btn-icon" onclick="toggleReward(\''+r.id+'\')" title="'+(r.actif?'Désactiver':'Activer')+'">'+(r.actif?ICONS.x:ICONS.check)+'</button></div>' +
+  '</div>';
+}
+function toggleReward(id){
+  const db = getDb();
+  const r = db.recompenses.find(x=>x.id===id);
+  if(r){ r.actif = !r.actif; save(db); render(); }
+}
+function attachRecompensesEvents(db){
+  document.getElementById('btnNewReward').addEventListener('click', function(){
+    const nom = prompt('Nom de la récompense :');
+    if(!nom) return;
+    const cout = parseInt(prompt('Coût en points :', '500'), 10);
+    if(!cout) return;
+    const categorie = prompt('Catégorie (Réduction, Livraison, Cadeau...) :', 'Réduction') || 'Autre';
+    const description = prompt('Description courte :', '') || '';
+    db.recompenses.push({ id:newId('rw'), nom:nom, description:description, cout_points:cout, categorie:categorie, actif:true });
+    save(db);
+    render();
+  });
+}
+
+/* ---------- Page : Paramètres ---------- */
+function pageParametres(db){
+  const s = getSettings(db);
+  let html = '<header class="pagehead"><div><h1>Paramètres du programme</h1><p>Règles de points et de paliers appliquées automatiquement</p></div></header>';
+
+  html += '<div class="grid grid-2">';
+  html += '<div class="card"><h3 style="font-size:15px;margin-bottom:14px;">Règles de points</h3>' +
+    '<div class="field"><label>Points crédités par tranche de 1 000 FCFA dépensée</label><input type="number" id="setPoints1000" value="'+s.pointsPour1000+'" min="0" step="0.5"></div>' +
+    '<div class="field"><label>Points offerts à l\'inscription (bonus de bienvenue)</label><input type="number" id="setBonus" value="'+s.bonusBienvenue+'" min="0"></div>' +
+    '<button class="btn btn-primary" id="btnSaveRegles">Enregistrer les règles</button>' +
+  '</div>';
+
+  html += '<div class="card"><h3 style="font-size:15px;margin-bottom:14px;">Paliers</h3>' +
+    '<p class="muted" style="font-size:12.5px;margin-bottom:12px;">Seuil minimum de points pour chaque palier (repris automatiquement sur le site marketplace).</p>';
+  s.paliers.forEach(function(p, i){
+    html += '<div class="field" style="display:flex;gap:10px;align-items:flex-end;">' +
+      '<div style="flex:1;"><label>'+p.nom+' — points minimum</label><input type="number" class="setPalierMin" data-idx="'+i+'" value="'+p.min+'" '+(i===0?'disabled':'')+'></div>' +
+    '</div>';
+  });
+  html += '<button class="btn btn-primary" id="btnSavePaliers">Enregistrer les paliers</button>' +
+  '</div>';
+  html += '</div>';
+
+  html += '<div class="card" style="margin-top:16px;"><h3 style="font-size:14px;margin-bottom:8px;">À propos de cette plateforme</h3>' +
+    '<p class="muted" style="font-size:13px;margin-bottom:12px;">Toutes les données (membres, transactions, récompenses) sont stockées uniquement dans ce navigateur (localStorage), sur cet appareil. Rien n\'est envoyé à un serveur — application indépendante du site marketplace Karramna Agro, sur le même principe que NAKA (nano crédit fournisseur).</p>' +
+  '</div>';
+
+  return html;
+}
+function attachParametresEvents(db){
+  document.getElementById('btnSaveRegles').addEventListener('click', function(){
+    const s = getSettings(db);
+    s.pointsPour1000 = parseFloat(document.getElementById('setPoints1000').value) || 1;
+    s.bonusBienvenue = parseInt(document.getElementById('setBonus').value,10) || 0;
+    db.settings = s;
+    save(db);
+    alert('Règles enregistrées.');
+    render();
+  });
+  document.getElementById('btnSavePaliers').addEventListener('click', function(){
+    const s = getSettings(db);
+    document.querySelectorAll('.setPalierMin').forEach(function(input){
+      const idx = parseInt(input.dataset.idx,10);
+      if(idx>0) s.paliers[idx].min = parseInt(input.value,10) || 0;
+    });
+    db.settings = s;
+    save(db);
+    alert('Paliers enregistrés.');
+    render();
+  });
+}
+</script>
+</body>
+</html>

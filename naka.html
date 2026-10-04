@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Karramna Agro — NAKA (démo locale)</title>
+<style>
+  :root{
+    --green:#1F4D2E; --green-dark:#163A21;
+    --amber:#D9941F; --amber-light:#F2B14A;
+    --bg:#FAFAF7; --text:#27332C; --muted:#6E7A72;
+    --card:#FFFFFF; --card-alt:#F7F5EF; --border:rgba(0,0,0,.08);
+    --red:#DC2626; --red-bg:#FEF2F2;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0;font-size:14px;}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;font-size:13.5px;cursor:pointer;}
+  input,select{font-family:inherit;font-size:14px;}
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{width:250px;background:var(--green);color:#fff;position:fixed;left:0;top:0;bottom:0;display:flex;flex-direction:column;overflow-y:auto;}
+  .sidebar .brand{padding:26px 22px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;}
+  .sidebar .brand .logo{width:36px;height:36px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .sidebar .brand .names p:first-child{font-family:Georgia,serif;font-weight:700;font-size:14.5px;letter-spacing:.3px;margin:0;}
+  .sidebar .brand .names p:last-child{font-size:11px;color:rgba(255,255,255,.6);margin:2px 0 0;}
+  .sidebar nav{flex:1;padding:18px 12px;display:flex;flex-direction:column;gap:4px;}
+  .sidebar nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:rgba(255,255,255,.82);font-size:13.5px;transition:background .15s;}
+  .sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff;}
+  .sidebar nav a.active{background:var(--amber);color:var(--green);font-weight:600;}
+  .sidebar .foot{padding:18px 22px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.5);line-height:1.5;}
+  .sidebar .foot button{margin-top:10px;background:rgba(255,255,255,.1);border:none;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;}
+  .sidebar .foot button:hover{background:rgba(255,255,255,.18);}
+
+  .main{flex:1;margin-left:250px;padding:34px 40px;max-width:1360px;}
+  header.pagehead{margin-bottom:26px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  header.pagehead h1{font-size:25px;color:var(--green);font-weight:700;}
+  header.pagehead p{color:var(--muted);font-size:13.5px;margin:6px 0 0;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  .grid-3{grid-template-columns:2fr 1fr;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);} .grid-3,.grid-2{grid-template-columns:1fr;}}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .card-alt{background:var(--card-alt);}
+  .card-dark{background:var(--green);color:#fff;}
+  .stat-label{font-size:12.5px;color:rgba(0,0,0,.5);font-weight:500;margin:0 0 6px;display:flex;justify-content:space-between;align-items:center;}
+  .stat-value{font-size:25px;font-weight:600;line-height:1;margin:0;}
+  .stat-value small{font-size:12px;font-weight:400;color:rgba(0,0,0,.4);margin-left:4px;}
+  .tone-warning{background:#FDF0DC;} .tone-warning .stat-value{color:var(--amber);}
+  .tone-danger{background:var(--red-bg);} .tone-danger .stat-value{color:var(--red);}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{text-align:left;color:rgba(0,0,0,.4);font-weight:500;font-size:12.5px;padding:9px 14px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.015);}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:rgba(0,0,0,.015);}
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+
+  .badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:500;white-space:nowrap;}
+  .badge-gray{background:rgba(0,0,0,.06);color:rgba(0,0,0,.6);}
+  .badge-green{background:rgba(31,77,46,.1);color:var(--green);}
+  .badge-amber{background:rgba(217,148,31,.15);color:#8a5a00;}
+  .badge-red{background:#FEE2E2;color:#B91C1C;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-weight:500;border:none;transition:background .15s;}
+  .btn-primary{background:var(--green);color:#fff;}
+  .btn-primary:hover{background:var(--green-dark);}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-outline{background:#fff;border:1px solid var(--border);color:var(--text);}
+  .btn-outline:hover{background:rgba(0,0,0,.03);}
+  .btn-outline.active{background:var(--green);color:#fff;border-color:var(--green);}
+  .btn-text{background:none;border:none;color:var(--green);font-weight:500;padding:0;}
+  .btn-text:hover{text-decoration:underline;}
+  .btn-icon{background:none;border:1px solid var(--border);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:var(--text);}
+  .btn-icon:hover{background:rgba(0,0,0,.05);}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:500;color:rgba(0,0,0,.6);margin-bottom:6px;}
+  .field input,.field select{width:100%;padding:9px 12px;border-radius:9px;border:1px solid rgba(0,0,0,.12);}
+  .field input:focus,.field select:focus{outline:2px solid rgba(31,77,46,.18);border-color:var(--green);}
+
+  .searchbar{display:flex;gap:10px;margin-bottom:18px;}
+  .searchbar input[type=text]{flex:1;max-width:340px;padding:10px 12px 10px 34px;border-radius:9px;border:1px solid rgba(0,0,0,.12);background:#fff;}
+  .searchbar select{padding:10px 12px;border-radius:9px;border:1px solid rgba(0,0,0,.12);background:#fff;}
+  .search-wrap{position:relative;flex:1;max-width:340px;}
+  .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.35;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--border);}
+  .modal-head h3{font-size:15.5px;font-family:inherit;font-weight:600;}
+  .modal-body{padding:20px 22px;}
+
+  .pillrow{display:flex;gap:8px;margin-bottom:18px;}
+  .empty{text-align:center;color:rgba(0,0,0,.32);padding:40px 0;}
+  .muted{color:var(--muted);}
+  .progress{height:10px;background:rgba(0,0,0,.06);border-radius:99px;overflow:hidden;}
+  .progress-bar{height:100%;border-radius:99px;background:var(--green);}
+  .flex-between{display:flex;justify-content:space-between;align-items:center;}
+  .demo-tag{font-size:11px;color:rgba(0,0,0,.35);border:1px solid var(--border);padding:4px 10px;border-radius:99px;white-space:nowrap;}
+  .icon-circle{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .prodcard{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;text-align:left;background:#fff;width:100%;}
+  .prodcard:hover{border-color:var(--green);background:rgba(31,77,46,.02);}
+  .cart-line{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);}
+  .cart-line:last-child{border-bottom:none;}
+  .qty-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:#fff;display:inline-flex;align-items:center;justify-content:center;}
+  .decision-box{border-radius:10px;padding:13px 14px;margin-bottom:14px;font-size:12.5px;}
+  .decision-box .dtitle{font-weight:600;font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+  .sticky{position:sticky;top:20px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   KARRAMNA AGRO — Plateforme nano credit fournisseur (version HTML autonome)
+   Aucun serveur requis : toute la logique du moteur de credit tourne dans le
+   navigateur, les donnees sont stockees dans localStorage. Fonctionnellement
+   identique a la version backend + React, pour tester ou faire une demo hors
+   ligne sans rien installer.
+   ========================================================================= */
+
+/* ---------- Icones (SVG inline, style Feather) ---------- */
+const ICONS = {
+  dashboard:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>',
+  users:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  basket:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.5 9h13l-1.2 9.4a2 2 0 0 1-2 1.6H8.7a2 2 0 0 1-2-1.6L5.5 9Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>',
+  wallet:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>',
+  settings:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  search:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+  plus:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>',
+  minus:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"/></svg>',
+  trash:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>',
+  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  arrowLeft:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+  alert:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>',
+  xcircle:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>',
+  phone:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>',
+  pin:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  calendar:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  cash:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M14.8 9a2 2 0 0 0-1.8-1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1M12 6v2m0 8v2"/></svg>',
+};
+
+/* ---------- Formatage ---------- */
+const fmtFCFA = n => Math.round(n).toLocaleString('fr-FR') + ' FCFA';
+const fmtDate = iso => new Date(iso).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+const TYPE_LABELS = { restaurant:'Restaurant', gargote:'Gargote', tanganaa:'Tanganaa', dibiterie:'Dibiterie', menage:'Menage', hotel:'Hotel' };
+const PALIER_TONE = { 0:'gray', 1:'amber', 2:'green', 3:'green' };
+
+/* ---------- Moteur de credit (port fidele de creditEngine.js) ---------- */
+const PALIERS = {
+  0:{ nom:'Nouveau client', plafond:0, delaiJours:0 },
+  1:{ nom:'Starter', plafond:15000, delaiJours:2 },
+  2:{ nom:'Confirme', plafond:40000, delaiJours:4 },
+  3:{ nom:'Premium', plafond:100000, delaiJours:7 },
+};
+const CREDIT_ELIGIBLE_TYPES = ['restaurant','gargote','tanganaa','dibiterie'];
+const REGLES_PROMOTION = { 1:{r:2}, 2:{r:5}, 3:{r:8, anc:90} };
+const JOURS_GEL = 30;
+const HEURES_ALERTE = 48;
+
+function joursEntre(a,b){ return Math.floor((new Date(b)-new Date(a))/86400000); }
+function newId(p){ return p+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+
+function getEncoursNonRembourse(db, clientId){
+  return db.credits.filter(c=>c.client_id===clientId && c.statut!=='paye').reduce((s,c)=>s+c.montant_du,0);
+}
+function getPlafondDisponible(db, client){
+  const plafond = PALIERS[client.palier] ? PALIERS[client.palier].plafond : 0;
+  return Math.max(0, plafond - getEncoursNonRembourse(db, client.id));
+}
+function evaluerCommande(db, client, montant){
+  if(CREDIT_ELIGIBLE_TYPES.indexOf(client.type_structure)===-1){
+    return { statut:'comptant_obligatoire', montantComptant:montant, montantCredit:0, motif:"Le nano credit fournisseur est reserve aux restaurants, gargotieres, tanganaas et dibiteries." };
+  }
+  if(client.palier===0){
+    return { statut:'comptant_obligatoire', montantComptant:montant, montantCredit:0, motif:"Nouveau client : les premieres commandes se font au comptant pour etablir l'historique." };
+  }
+  const dispo = getPlafondDisponible(db, client);
+  if(montant<=dispo) return { statut:'credit_approuve', montantComptant:0, montantCredit:montant, motif:"Plafond disponible suffisant (" + fmtFCFA(dispo) + ")." };
+  if(dispo>0) return { statut:'paiement_mixte', montantComptant:montant-dispo, montantCredit:dispo, motif:"Plafond partiellement disponible (" + fmtFCFA(dispo) + " sur " + fmtFCFA(montant) + " demandes)." };
+  return { statut:'plafond_atteint', montantComptant:montant, montantCredit:0, motif:"Plafond de credit entierement utilise. Un remboursement liberera de la capacite." };
+}
+function creerCommande(db, clientId, lignes, canal){
+  canal = canal || 'interne';
+  const client = db.clients.find(c=>c.id===clientId);
+  if(!client) throw new Error('Client introuvable');
+  const lignesEnrichies = lignes.map(l=>{
+    const p = db.products.find(pp=>pp.id===l.product_id);
+    if(!p) throw new Error('Produit introuvable');
+    return { product_id:p.id, nom:p.nom, quantite:l.quantite, prix_unitaire:p.prix_unitaire, sous_total:p.prix_unitaire*l.quantite };
+  });
+  const montantTotal = lignesEnrichies.reduce((s,l)=>s+l.sous_total,0);
+  const decision = evaluerCommande(db, client, montantTotal);
+  const orderId = newId('cmd');
+  const order = { id:orderId, client_id:clientId, date:new Date().toISOString(), lignes:lignesEnrichies, montant_total:montantTotal,
+    statut_credit:decision.statut, montant_comptant:decision.montantComptant, montant_credit:decision.montantCredit, motif:decision.motif, canal:canal };
+  db.orders.push(order);
+  let credit = null;
+  if(decision.montantCredit>0){
+    const delai = PALIERS[client.palier].delaiJours;
+    const echeance = new Date(); echeance.setDate(echeance.getDate()+delai);
+    credit = { id:newId('cred'), order_id:orderId, client_id:clientId, montant_du:decision.montantCredit,
+      date_octroi:new Date().toISOString(), date_echeance:echeance.toISOString(), statut:'en_cours', date_paiement:null };
+    db.credits.push(credit);
+  }
+  save(db);
+  return { order:order, credit:credit, decision:decision, client:client };
+}
+function calculerPalier(db, client, opts){
+  opts = opts || {};
+  const historique = db.credits.filter(c=>c.client_id===client.id && c.statut==='paye');
+  const remboursementsATemps = historique.filter(c=>!c.paye_en_retard).length;
+  const incidents = db.credits.filter(c=>c.client_id===client.id && c.paye_en_retard)
+    .sort((a,b)=>new Date(b.date_paiement)-new Date(a.date_paiement));
+  const dernierIncident = incidents[0];
+  if(opts.incidentSiRetard) return Math.max(1, client.palier-1);
+  if(dernierIncident && joursEntre(dernierIncident.date_paiement, new Date().toISOString())<JOURS_GEL) return client.palier;
+  const anciennete = joursEntre(client.date_inscription, new Date().toISOString());
+  let palier = client.palier;
+  if(remboursementsATemps>=REGLES_PROMOTION[3].r && anciennete>=REGLES_PROMOTION[3].anc) palier=3;
+  else if(remboursementsATemps>=REGLES_PROMOTION[2].r) palier=Math.max(palier,2);
+  else if(remboursementsATemps>=REGLES_PROMOTION[1].r) palier=Math.max(palier,1);
+  return palier;
+}
+function enregistrerPaiement(db, creditId, montant, methode){
+  const credit = db.credits.find(c=>c.id===creditId);
+  if(!credit) throw new Error('Creance introuvable');
+  if(credit.statut==='paye') throw new Error('Cette creance est deja soldee');
+  db.payments.push({ id:newId('pay'), credit_id:creditId, montant:montant, methode:methode, date:new Date().toISOString() });
+  const totalPaye = db.payments.filter(p=>p.credit_id===creditId).reduce((s,p)=>s+p.montant,0);
+  const enRetard = new Date() > new Date(credit.date_echeance);
+  if(totalPaye>=credit.montant_du){
+    credit.statut='paye'; credit.date_paiement=new Date().toISOString(); credit.paye_en_retard=enRetard;
+  }
+  const client = db.clients.find(c=>c.id===credit.client_id);
+  const nouveauPalier = calculerPalier(db, client, { incidentSiRetard:enRetard });
+  if(nouveauPalier!==client.palier){
+    db.scoringLog.push({ id:newId('score'), client_id:client.id, date:new Date().toISOString(),
+      palier_avant:client.palier, palier_apres:nouveauPalier, motif: enRetard ? 'Retard de paiement detecte' : 'Historique de remboursement favorable' });
+    client.palier = nouveauPalier;
+  }
+  save(db);
+  return { credit:credit, client:client };
+}
+function getAlertes(db){
+  const now = new Date(); const enRetard=[]; const echeanceProche=[];
+  for(let i=0;i<db.credits.length;i++){
+    const c = db.credits[i];
+    if(c.statut!=='en_cours') continue;
+    const h = (new Date(c.date_echeance)-now)/3600000;
+    if(h<0) enRetard.push(c); else if(h<=HEURES_ALERTE) echeanceProche.push(c);
+  }
+  return { enRetard:enRetard, echeanceProche:echeanceProche };
+}
+function getDashboardSummary(db){
+  const encoursTotal = db.credits.filter(c=>c.statut!=='paye').reduce((s,c)=>s+c.montant_du,0);
+  const clientsActifs = db.clients.filter(c=>c.statut==='actif').length;
+  const alertes = getAlertes(db);
+  const parMois = {};
+  for(let i=0;i<db.credits.length;i++){ const c=db.credits[i]; const m=c.date_octroi.slice(0,7); parMois[m]=(parMois[m]||0)+c.montant_du; }
+  const evolution = Object.keys(parMois).sort().map(function(mois){ return {mois:mois, montant:parMois[mois]}; });
+  const repartitionPaliers = [0,1,2,3].map(function(p){ return { palier:p, nom:PALIERS[p].nom, nombre:db.clients.filter(function(c){return c.palier===p;}).length }; });
+  return { encoursTotal:encoursTotal, clientsActifs:clientsActifs, nombreEnRetard:alertes.enRetard.length, nombreEcheanceProche:alertes.echeanceProche.length, evolution:evolution, repartitionPaliers:repartitionPaliers };
+}
+
+/* ---------- Persistance (localStorage) ---------- */
+const STORAGE_KEY = 'karramna_nano_credit_db_v1';
+function save(db){ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
+function load(){ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+
+function joursDepuis(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString(); }
+function joursDans(n){ const d=new Date(); d.setDate(d.getDate()+n); return d.toISOString(); }
+
+function seedDemoData(){
+  const products = [
+    {id:newId('prod'),nom:'Oignon (sac 25kg)',categorie:'Legumes',prix_unitaire:12500,unite:'sac'},
+    {id:newId('prod'),nom:'Riz parfume (sac 50kg)',categorie:'Riz',prix_unitaire:22000,unite:'sac'},
+    {id:newId('prod'),nom:'Huile vegetale (bidon 5L)',categorie:'Huiles',prix_unitaire:6500,unite:'bidon'},
+    {id:newId('prod'),nom:'Tomate concentree (carton)',categorie:'Conserves',prix_unitaire:9500,unite:'carton'},
+    {id:newId('prod'),nom:'Poulet entier (carton 10kg)',categorie:'Viandes',prix_unitaire:18500,unite:'carton'},
+    {id:newId('prod'),nom:'Pommes de terre (sac 25kg)',categorie:'Legumes',prix_unitaire:9800,unite:'sac'},
+    {id:newId('prod'),nom:'Sucre en morceaux (carton)',categorie:'Epicerie',prix_unitaire:14200,unite:'carton'},
+    {id:newId('prod'),nom:'Pates alimentaires (carton)',categorie:'Epicerie',prix_unitaire:8700,unite:'carton'},
+  ];
+
+  const clients = [
+    {id:newId('cli'),nom:'Restaurant Chez Awa',type_structure:'restaurant',quartier:'Parcelles Assainies',telephone:'77 123 45 01',date_inscription:joursDepuis(140),palier:3,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Gargote Fatou Diop',type_structure:'gargote',quartier:'Pikine',telephone:'77 123 45 02',date_inscription:joursDepuis(95),palier:2,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Tanganaa Rue 12',type_structure:'tanganaa',quartier:'Grand Yoff',telephone:'77 123 45 03',date_inscription:joursDepuis(60),palier:1,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Dibiterie Ndiaye',type_structure:'dibiterie',quartier:'Pikine',telephone:'77 123 45 04',date_inscription:joursDepuis(20),palier:1,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Restaurant Le Baobab',type_structure:'restaurant',quartier:'Grand Yoff',telephone:'77 123 45 05',date_inscription:joursDepuis(75),palier:2,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Gargote Sokhna',type_structure:'gargote',quartier:'Parcelles Assainies',telephone:'77 123 45 06',date_inscription:joursDepuis(10),palier:0,parrain_id:null,statut:'actif'},
+    {id:newId('cli'),nom:'Tanganaa Marche Thiaroye',type_structure:'tanganaa',quartier:'Thiaroye',telephone:'77 123 45 07',date_inscription:joursDepuis(50),palier:1,parrain_id:null,statut:'actif'},
+  ];
+  function cid(nom){ return clients.find(function(c){return c.nom===nom;}).id; }
+
+  const orders=[], credits=[], payments=[], scoringLog=[];
+  const delaiParPalier = {0:0,1:2,2:4,3:7};
+
+  function ajouter(opt){
+    const client_id = cid(opt.client);
+    const lignes = opt.items.map(function(it){
+      const p = products.find(function(pp){return pp.nom===it[0];});
+      return { product_id:p.id, nom:p.nom, quantite:it[1], prix_unitaire:p.prix_unitaire, sous_total:p.prix_unitaire*it[1] };
+    });
+    const montant_total = lignes.reduce(function(s,l){return s+l.sous_total;},0);
+    const orderId = newId('cmd');
+    orders.push({ id:orderId, client_id:client_id, date:joursDepuis(opt.joursOctroi), lignes:lignes, montant_total:montant_total,
+      statut_credit:'credit_approuve', montant_comptant:0, montant_credit:montant_total, motif:'Plafond disponible suffisant.', canal:'interne' });
+    const clientObj = clients.find(function(c){return c.id===client_id;});
+    const echeanceOffset = delaiParPalier[clientObj.palier] - opt.joursOctroi;
+    const credit = { id:newId('cred'), order_id:orderId, client_id:client_id, montant_du:montant_total,
+      date_octroi:joursDepuis(opt.joursOctroi),
+      date_echeance: echeanceOffset>=0 ? joursDans(echeanceOffset) : joursDepuis(-echeanceOffset),
+      statut:opt.statut, date_paiement:null, paye_en_retard:false };
+    if(opt.statut==='paye'){
+      credit.date_paiement = joursDepuis(Math.max(0, opt.joursOctroi-(opt.retard?-1:1)));
+      credit.paye_en_retard = !!opt.retard;
+      payments.push({ id:newId('pay'), credit_id:credit.id, montant:montant_total, methode:'cash', date:credit.date_paiement });
+    }
+    credits.push(credit);
+  }
+
+  ajouter({client:'Restaurant Chez Awa', items:[['Riz parfume (sac 50kg)',2],['Huile vegetale (bidon 5L)',4]], joursOctroi:15, statut:'paye'});
+  ajouter({client:'Restaurant Chez Awa', items:[['Poulet entier (carton 10kg)',2],['Oignon (sac 25kg)',1]], joursOctroi:6, statut:'paye'});
+  ajouter({client:'Restaurant Chez Awa', items:[['Tomate concentree (carton)',3],['Sucre en morceaux (carton)',1]], joursOctroi:1, statut:'en_cours'});
+  ajouter({client:'Gargote Fatou Diop', items:[['Oignon (sac 25kg)',1],['Pommes de terre (sac 25kg)',1]], joursOctroi:12, statut:'paye'});
+  ajouter({client:'Gargote Fatou Diop', items:[['Huile vegetale (bidon 5L)',2]], joursOctroi:3, statut:'en_cours'});
+  ajouter({client:'Tanganaa Rue 12', items:[['Pates alimentaires (carton)',1],['Oignon (sac 25kg)',1]], joursOctroi:1, statut:'en_cours'});
+  ajouter({client:'Dibiterie Ndiaye', items:[['Poulet entier (carton 10kg)',1]], joursOctroi:6, statut:'en_cours'});
+  ajouter({client:'Restaurant Le Baobab', items:[['Riz parfume (sac 50kg)',1],['Sucre en morceaux (carton)',1]], joursOctroi:20, statut:'paye', retard:true});
+  ajouter({client:'Restaurant Le Baobab', items:[['Huile vegetale (bidon 5L)',3]], joursOctroi:2, statut:'en_cours'});
+  ajouter({client:'Tanganaa Marche Thiaroye', items:[['Oignon (sac 25kg)',1]], joursOctroi:8, statut:'paye'});
+
+  return { clients:clients, products:products, orders:orders, credits:credits, payments:payments, scoringLog:scoringLog };
+}
+
+function getDb(){
+  let db = load();
+  if(!db){ db = seedDemoData(); save(db); }
+  return db;
+}
+function resetDemoData(){
+  if(!confirm('Reinitialiser toutes les donnees de demonstration ? Vos modifications seront perdues.')) return;
+  const db = seedDemoData(); save(db); navigate('#/');
+  render();
+}
+
+/* ---------- Router ---------- */
+function navigate(hash){ location.hash = hash; }
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', render);
+
+const NAV = [
+  {href:'#/', label:'Tableau de bord', icon:'dashboard'},
+  {href:'#/clients', label:'Clients', icon:'users'},
+  {href:'#/commandes', label:'Nouvelle commande', icon:'basket'},
+  {href:'#/credits', label:'Encours credit', icon:'wallet'},
+  {href:'#/parametres', label:'Parametres', icon:'settings'},
+];
+
+function layout(activeHref, content){
+  return '<div class="app">' +
+    '<aside class="sidebar">' +
+      '<div class="brand"><div class="logo">' + ICONS.basket + '</div>' +
+      '<div class="names"><p>KARRAMNA AGRO</p><p>NAKA · Nano crédit fournisseur</p></div></div>' +
+      '<nav>' + NAV.map(function(n){ return '<a href="'+n.href+'" class="'+(activeHref===n.href?'active':'')+'">'+ICONS[n.icon]+n.label+'</a>'; }).join('') + '</nav>' +
+      '<div class="foot">Version HTML autonome — donnees stockees dans ce navigateur uniquement.<br><button onclick="resetDemoData()">Reinitialiser les donnees</button></div>' +
+    '</aside>' +
+    '<main class="main">' + content + '</main>' +
+  '</div>';
+}
+
+function render(){
+  const hash = location.hash || '#/';
+  const db = getDb();
+  const app = document.getElementById('app');
+  const parts = hash.split('/');
+  const clientId = parts[2];
+
+  if(hash==='#/' || hash===''){ app.innerHTML = layout('#/', pageDashboard(db)); }
+  else if(hash==='#/clients'){ app.innerHTML = layout('#/clients', pageClients(db)); attachClientsEvents(db); }
+  else if(hash.indexOf('#/clients/')===0){ app.innerHTML = layout('#/clients', pageClientDetail(db, clientId)); }
+  else if(hash==='#/commandes'){ app.innerHTML = layout('#/commandes', pageCommandes(db)); attachCommandesEvents(db); }
+  else if(hash==='#/credits'){ app.innerHTML = layout('#/credits', pageCredits(db)); }
+  else if(hash==='#/parametres'){ app.innerHTML = layout('#/parametres', pageParametres()); }
+  else { app.innerHTML = layout('#/', pageDashboard(db)); }
+}
+
+/* ---------- Page : Tableau de bord ---------- */
+function pageDashboard(db){
+  const s = getDashboardSummary(db);
+  const alertes = getAlertes(db);
+  function withNom(c){ const cl = db.clients.find(function(x){return x.id===c.client_id;}); return Object.assign({}, c, { client_nom: cl ? cl.nom : '?' }); }
+  const maxMontant = Math.max.apply(null, [1].concat(s.evolution.map(function(e){return e.montant;})));
+
+  let html = '<header class="pagehead"><div><h1>Tableau de bord</h1><p>Vue d\'ensemble du nano credit fournisseur</p></div>' +
+    '<span class="demo-tag">Demo locale — navigateur</span></header>';
+
+  html += '<div class="grid grid-4" style="margin-bottom:16px;">' +
+    '<div class="card"><p class="stat-label">Encours total</p><p class="stat-value">' + fmtFCFA(s.encoursTotal) + '</p></div>' +
+    '<div class="card"><p class="stat-label">Clients actifs</p><p class="stat-value">' + s.clientsActifs + '</p></div>' +
+    '<div class="card ' + (s.nombreEcheanceProche>0?'tone-warning':'') + '"><p class="stat-label">Echeances sous 48h</p><p class="stat-value">' + s.nombreEcheanceProche + '</p></div>' +
+    '<div class="card ' + (s.nombreEnRetard>0?'tone-danger':'') + '"><p class="stat-label">En retard</p><p class="stat-value">' + s.nombreEnRetard + '</p></div>' +
+  '</div>';
+
+  html += '<div class="grid grid-3" style="margin-bottom:16px;">' +
+    '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:2px;">Evolution de l\'encours octroye</p>' +
+    '<p class="muted" style="font-size:12.5px;margin-bottom:16px;">Montant total de credit accorde par mois</p>' +
+    '<div style="display:flex;align-items:flex-end;gap:14px;height:160px;padding:0 6px;">' +
+    s.evolution.map(function(e){
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">' +
+        '<div style="font-size:11.5px;color:var(--muted);">' + (e.montant/1000).toFixed(0) + 'k</div>' +
+        '<div style="width:100%;max-width:56px;height:' + Math.max(6,(e.montant/maxMontant)*120) + 'px;background:var(--green);border-radius:6px 6px 0 0;"></div>' +
+        '<div style="font-size:11.5px;color:var(--muted);">' + e.mois + '</div></div>';
+    }).join('') +
+    '</div></div>' +
+    '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:2px;">Repartition par palier</p>' +
+    '<p class="muted" style="font-size:12.5px;margin-bottom:16px;">Nombre de clients</p>' +
+    s.repartitionPaliers.map(function(p){
+      return '<div style="margin-bottom:12px;"><div class="flex-between" style="font-size:12.5px;margin-bottom:5px;">' +
+        '<span style="font-weight:500;">Palier ' + p.palier + ' — ' + p.nom + '</span><span class="muted">' + p.nombre + '</span></div>' +
+        '<div class="progress"><div class="progress-bar" style="width:' + (s.clientsActifs?(p.nombre/s.clientsActifs)*100:0) + '%;background:var(--amber);"></div></div></div>';
+    }).join('') +
+    '</div></div>';
+
+  const enRetard = alertes.enRetard.map(withNom);
+  const echeanceProche = alertes.echeanceProche.map(withNom);
+  html += '<div class="card"><div class="flex-between" style="margin-bottom:14px;">' +
+    '<p style="font-weight:600;font-size:15px;">File d\'attente — echeances a surveiller</p>' +
+    '<a href="#/credits" class="btn-text" style="font-size:13px;">Voir tous les encours →</a></div>';
+  if(enRetard.length===0 && echeanceProche.length===0){
+    html += '<p class="empty">Aucune echeance urgente pour le moment.</p>';
+  } else {
+    html += '<table><thead><tr><th>Client</th><th>Montant</th><th>Echeance</th><th>Statut</th></tr></thead><tbody>' +
+      enRetard.map(function(c){ return '<tr><td>'+c.client_nom+'</td><td>'+fmtFCFA(c.montant_du)+'</td><td>'+fmtDate(c.date_echeance)+'</td><td><span class="badge badge-red">En retard</span></td></tr>'; }).join('') +
+      echeanceProche.map(function(c){ return '<tr><td>'+c.client_nom+'</td><td>'+fmtFCFA(c.montant_du)+'</td><td>'+fmtDate(c.date_echeance)+'</td><td><span class="badge badge-amber">Sous 48h</span></td></tr>'; }).join('') +
+      '</tbody></table>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---------- Page : Clients ---------- */
+let clientsFilter = { q:'', type:'' };
+function pageClients(db){
+  let list = db.clients;
+  if(clientsFilter.q){ const q=clientsFilter.q.toLowerCase(); list = list.filter(function(c){ return c.nom.toLowerCase().indexOf(q)>=0 || c.quartier.toLowerCase().indexOf(q)>=0; }); }
+  if(clientsFilter.type) list = list.filter(function(c){ return c.type_structure===clientsFilter.type; });
+
+  let html = '<header class="pagehead"><div><h1>Clients</h1><p>Restaurants, gargotieres, tanganaas et dibiteries</p></div>' +
+    '<button class="btn btn-primary" onclick="openNouveauClientModal()">' + ICONS.plus + ' Nouveau client</button></header>';
+
+  html += '<div class="searchbar"><div class="search-wrap">' + ICONS.search + '<input type="text" id="clientSearch" placeholder="Rechercher un client ou un quartier..." value="' + clientsFilter.q + '"/></div>' +
+    '<select id="clientTypeFilter"><option value="">Tous les types</option>' +
+    Object.keys(TYPE_LABELS).map(function(k){ return '<option value="'+k+'" '+(clientsFilter.type===k?'selected':'')+'>'+TYPE_LABELS[k]+'</option>'; }).join('') +
+    '</select></div>';
+
+  html += '<div class="table-wrap"><table><thead><tr><th>Client</th><th>Type</th><th>Quartier</th><th>Palier</th><th>Plafond disponible</th><th>Encours</th></tr></thead><tbody>';
+  if(list.length===0){ html += '<tr><td colspan="6" class="empty">Aucun client trouve.</td></tr>'; }
+  else {
+    html += list.map(function(c){
+      const enc = getEncoursNonRembourse(db,c.id); const dispo = getPlafondDisponible(db,c);
+      return '<tr><td><a href="#/clients/'+c.id+'" style="color:var(--green);font-weight:500;">'+c.nom+'</a><div class="muted" style="font-size:11.5px;">'+c.telephone+'</div></td>' +
+        '<td>'+(TYPE_LABELS[c.type_structure]||c.type_structure)+'</td><td>'+c.quartier+'</td>' +
+        '<td><span class="badge badge-'+PALIER_TONE[c.palier]+'">Palier '+c.palier+' — '+PALIERS[c.palier].nom+'</span></td>' +
+        '<td style="font-weight:500;">'+fmtFCFA(dispo)+'</td><td class="muted">'+fmtFCFA(enc)+'</td></tr>';
+    }).join('');
+  }
+  html += '</tbody></table></div><div id="modalRoot"></div>';
+  return html;
+}
+function attachClientsEvents(db){
+  const se = document.getElementById('clientSearch');
+  const te = document.getElementById('clientTypeFilter');
+  if(se) se.addEventListener('input', function(e){ clientsFilter.q=e.target.value; renderClientsOnly(db); });
+  if(te) te.addEventListener('change', function(e){ clientsFilter.type=e.target.value; renderClientsOnly(db); });
+}
+function renderClientsOnly(db){
+  document.querySelector('.main').innerHTML = pageClients(db);
+  attachClientsEvents(db);
+}
+function openNouveauClientModal(){
+  const optionsHtml = Object.keys(TYPE_LABELS).map(function(k){ return '<option value="'+k+'">'+TYPE_LABELS[k]+'</option>'; }).join('');
+  document.getElementById('modalRoot').innerHTML =
+    '<div class="modal-overlay" onclick="if(event.target===this) this.remove()"><div class="modal">' +
+    '<div class="modal-head"><h3>Nouveau client</h3><button class="btn-icon" onclick="this.closest(\'.modal-overlay\').remove()">' + ICONS.x + '</button></div>' +
+    '<div class="modal-body"><form id="newClientForm">' +
+      '<div class="field"><label>Nom de la structure</label><input required name="nom" placeholder="Ex : Restaurant Chez Awa"/></div>' +
+      '<div class="field"><label>Type</label><select name="type_structure">' + optionsHtml + '</select></div>' +
+      '<div class="field"><label>Quartier</label><input required name="quartier" placeholder="Ex : Pikine"/></div>' +
+      '<div class="field"><label>Telephone</label><input required name="telephone" placeholder="77 123 45 67"/></div>' +
+      '<p class="muted" style="font-size:12px;margin:-4px 0 14px;">Le client demarre au Palier 0 (paiement comptant) jusqu\'a ses premieres commandes sans incident.</p>' +
+      '<button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">' + ICONS.plus + ' Creer le client</button>' +
+    '</form></div></div></div>';
+  document.getElementById('newClientForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const db = getDb();
+    db.clients.push({ id:newId('cli'), nom:fd.get('nom'), type_structure:fd.get('type_structure'), quartier:fd.get('quartier'),
+      telephone:fd.get('telephone'), date_inscription:new Date().toISOString(), palier:0, parrain_id:null, statut:'actif' });
+    save(db);
+    document.querySelector('.modal-overlay').remove();
+    renderClientsOnly(db);
+  });
+}
+
+/* ---------- Page : Fiche client ---------- */
+function pageClientDetail(db, id){
+  const client = db.clients.find(function(c){return c.id===id;});
+  if(!client) return '<p class="empty">Client introuvable.</p>';
+  const encours = getEncoursNonRembourse(db, id);
+  const dispo = getPlafondDisponible(db, client);
+  const plafondPalier = PALIERS[client.palier].plafond;
+  const pct = plafondPalier>0 ? Math.min(100, Math.round((encours/plafondPalier)*100)) : 0;
+  const credits = db.credits.filter(function(c){return c.client_id===id;}).sort(function(a,b){return new Date(b.date_octroi)-new Date(a.date_octroi);});
+  const orders = db.orders.filter(function(o){return o.client_id===id;}).sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+  const scoringLog = db.scoringLog.filter(function(s){return s.client_id===id;}).sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+
+  function statutCredit(c){
+    if(c.statut==='paye') return c.paye_en_retard ? '<span class="badge badge-amber">Paye en retard</span>' : '<span class="badge badge-green">Paye a temps</span>';
+    return new Date()>new Date(c.date_echeance) ? '<span class="badge badge-red">En retard</span>' : '<span class="badge badge-gray">En cours</span>';
+  }
+
+  let html = '<a href="#/clients" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:18px;">' + ICONS.arrowLeft + ' Retour aux clients</a>';
+  html += '<div class="flex-between" style="align-items:flex-start;margin-bottom:26px;"><div>' +
+    '<h1 style="font-size:24px;color:var(--green);">' + client.nom + '</h1>' +
+    '<div style="display:flex;gap:16px;margin-top:8px;font-size:13px;color:var(--muted);flex-wrap:wrap;">' +
+    '<span style="display:flex;align-items:center;gap:5px;">' + ICONS.pin + ' ' + client.quartier + '</span>' +
+    '<span style="display:flex;align-items:center;gap:5px;">' + ICONS.phone + ' ' + client.telephone + '</span>' +
+    '<span style="display:flex;align-items:center;gap:5px;">' + ICONS.calendar + ' Client depuis le ' + fmtDate(client.date_inscription) + '</span>' +
+    '</div></div><span class="badge badge-' + PALIER_TONE[client.palier] + '">Palier ' + client.palier + ' — ' + PALIERS[client.palier].nom + '</span></div>';
+
+  html += '<div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px;">' +
+    '<div class="card"><p class="stat-label">Plafond du palier</p><p class="stat-value" style="font-size:20px;">' + fmtFCFA(plafondPalier) + '</p></div>' +
+    '<div class="card"><p class="stat-label">Encours actuel</p><p class="stat-value" style="font-size:20px;">' + fmtFCFA(encours) + '</p></div>' +
+    '<div class="card"><p class="stat-label">Disponible</p><p class="stat-value" style="font-size:20px;color:var(--green);">' + fmtFCFA(dispo) + '</p></div></div>';
+
+  html += '<div class="card" style="margin-bottom:18px;"><div class="flex-between" style="font-size:13px;margin-bottom:8px;">' +
+    '<span style="font-weight:500;">Utilisation du plafond</span><span class="muted">' + pct + '%</span></div>' +
+    '<div class="progress"><div class="progress-bar" style="width:' + pct + '%;background:' + (pct>=90?'#DC2626':pct>=60?'var(--amber)':'var(--green)') + ';"></div></div></div>';
+
+  html += '<div class="grid grid-2" style="margin-bottom:18px;">';
+  html += '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:14px;">Historique des creances</p>';
+  html += credits.length===0 ? '<p class="muted" style="font-size:13.5px;">Aucune creance pour ce client.</p>' :
+    credits.map(function(c){
+      return '<div class="flex-between" style="font-size:13.5px;padding:10px 0;border-bottom:1px solid var(--border);">' +
+        '<div><p style="font-weight:500;margin:0;">' + fmtFCFA(c.montant_du) + '</p><p class="muted" style="font-size:12px;margin:2px 0 0;">Echeance ' + fmtDate(c.date_echeance) + '</p></div>' +
+        statutCredit(c) + '</div>';
+    }).join('');
+  html += '</div>';
+  html += '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:14px;">Journal de scoring</p>';
+  html += scoringLog.length===0 ? '<p class="muted" style="font-size:13.5px;">Aucun changement de palier enregistre pour l\'instant.</p>' :
+    scoringLog.map(function(s){
+      return '<div style="font-size:13.5px;padding:10px 0;border-bottom:1px solid var(--border);">' +
+        '<p style="font-weight:500;margin:0;">Palier ' + s.palier_avant + ' → Palier ' + s.palier_apres + '</p>' +
+        '<p class="muted" style="font-size:12px;margin:2px 0 0;">' + s.motif + ' · ' + fmtDate(s.date) + '</p></div>';
+    }).join('');
+  html += '</div></div>';
+
+  html += '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:14px;">Historique des commandes</p>';
+  if(orders.length===0){ html += '<p class="muted" style="font-size:13.5px;">Aucune commande pour ce client.</p>'; }
+  else {
+    html += '<table><thead><tr><th>Date</th><th>Produits</th><th>Montant</th><th>Mode</th></tr></thead><tbody>' +
+      orders.map(function(o){
+        const badge = (o.montant_credit>0 && o.montant_comptant>0) ? '<span class="badge badge-amber">Mixte</span>' :
+          o.montant_credit>0 ? '<span class="badge badge-green">Credit</span>' : '<span class="badge badge-gray">Comptant</span>';
+        return '<tr><td>' + fmtDate(o.date) + '</td><td class="muted">' + o.lignes.map(function(l){return l.nom;}).join(', ') + '</td>' +
+          '<td style="font-weight:500;">' + fmtFCFA(o.montant_total) + '</td><td>' + badge + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---------- Page : Nouvelle commande ---------- */
+let panier = [];
+function pageCommandes(db){
+  const clientId = window.__selectedClientId || '';
+  const client = db.clients.find(function(c){return c.id===clientId;});
+  const montantTotal = panier.reduce(function(s,l){ const p=db.products.find(function(pp){return pp.id===l.product_id;}); return s+(p?p.prix_unitaire*l.quantite:0); },0);
+  const simulation = (client && montantTotal>0) ? evaluerCommande(db, client, montantTotal) : null;
+
+  let html = '<header class="pagehead"><div><h1>Nouvelle commande</h1><p>Le plafond de credit est verifie automatiquement a la validation</p></div></header>';
+  html += '<div class="grid" style="grid-template-columns:2fr 1fr;align-items:flex-start;"><div>';
+  html += '<div class="card" style="margin-bottom:18px;"><div class="field" style="margin-bottom:' + (client?'10px':'0') + ';">' +
+    '<label>Client</label><select id="clientSelect"><option value="">Selectionner un client...</option>' +
+    db.clients.map(function(c){ return '<option value="'+c.id+'" '+(c.id===clientId?'selected':'')+'>'+c.nom+' — '+c.quartier+'</option>'; }).join('') +
+    '</select></div>';
+  if(client){
+    html += '<div style="display:flex;align-items:center;gap:12px;"><span class="badge badge-' + PALIER_TONE[client.palier] + '">Palier ' + client.palier + ' — ' + PALIERS[client.palier].nom + '</span>' +
+      '<span style="font-size:13px;color:var(--muted);">Disponible : <strong style="color:var(--green);">' + fmtFCFA(getPlafondDisponible(db,client)) + '</strong></span></div>';
+  }
+  html += '</div>';
+
+  html += '<div class="card"><p style="font-size:12.5px;font-weight:500;color:var(--muted);margin-bottom:12px;">Catalogue produits</p><div class="grid grid-2">' +
+    db.products.map(function(p){
+      return '<button class="prodcard" onclick="addProduit(\''+p.id+'\')"><div><p style="font-size:13.5px;font-weight:500;margin:0;">'+p.nom+'</p>' +
+        '<p class="muted" style="font-size:12px;margin:2px 0 0;">'+fmtFCFA(p.prix_unitaire)+' / '+p.unite+'</p></div><span style="color:var(--green);">'+ICONS.plus+'</span></button>';
+    }).join('') + '</div></div></div>';
+
+  html += '<div class="sticky"><div class="card" style="margin-bottom:14px;">' +
+    '<p style="font-weight:600;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">' + ICONS.basket + ' Panier</p>';
+  if(panier.length===0){ html += '<p class="muted" style="font-size:13.5px;margin-bottom:16px;">Ajoutez des produits depuis le catalogue.</p>'; }
+  else {
+    html += panier.map(function(l){
+      const p = db.products.find(function(pp){return pp.id===l.product_id;});
+      if(!p) return '';
+      return '<div class="cart-line"><div style="flex:1;min-width:0;"><p style="font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+p.nom+'</p>' +
+        '<p class="muted" style="font-size:12px;margin:2px 0 0;">'+fmtFCFA(p.prix_unitaire*l.quantite)+'</p></div>' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
+        '<button class="qty-btn" onclick="updateQty(\''+p.id+'\',-1)">'+ICONS.minus+'</button>' +
+        '<span style="width:18px;text-align:center;">'+l.quantite+'</span>' +
+        '<button class="qty-btn" onclick="updateQty(\''+p.id+'\',1)">'+ICONS.plus+'</button>' +
+        '<button class="btn-icon" style="border:none;color:#c33;" onclick="removeProduit(\''+p.id+'\')">'+ICONS.trash+'</button></div></div>';
+    }).join('');
+  }
+  html += '<div class="flex-between" style="font-weight:600;font-size:14px;padding-top:10px;border-top:1px solid var(--border);margin:10px 0 14px;"><span>Total</span><span>' + fmtFCFA(montantTotal) + '</span></div>';
+  if(simulation) html += renderSimulation(simulation);
+  html += '<button class="btn btn-primary" style="width:100%;justify-content:center;" ' + ((!clientId||panier.length===0)?'disabled':'') + ' onclick="validerCommande()">Valider la commande</button>';
+  html += '</div><div id="resultatCommande"></div></div></div>';
+  return html;
+}
+function renderSimulation(sim){
+  const cfgs = {
+    credit_approuve:{icon:ICONS.check,bg:'rgba(31,77,46,.06)',label:'Credit approuve',color:'var(--green)'},
+    paiement_mixte:{icon:ICONS.alert,bg:'rgba(217,148,31,.1)',label:'Paiement mixte',color:'#8a5a00'},
+    plafond_atteint:{icon:ICONS.xcircle,bg:'#FEF2F2',label:'Plafond atteint',color:'#B91C1C'},
+    comptant_obligatoire:{icon:ICONS.alert,bg:'rgba(0,0,0,.04)',label:'Comptant requis',color:'#444'},
+  };
+  const cfg = cfgs[sim.statut];
+  let html = '<div class="decision-box" style="background:' + cfg.bg + ';"><p class="dtitle" style="color:' + cfg.color + ';">' + cfg.icon + ' ' + cfg.label + '</p>';
+  if(sim.montantCredit>0) html += '<p style="margin:2px 0;">A credit : <strong>' + fmtFCFA(sim.montantCredit) + '</strong></p>';
+  if(sim.montantComptant>0) html += '<p style="margin:2px 0;">Comptant : <strong>' + fmtFCFA(sim.montantComptant) + '</strong></p>';
+  html += '</div>';
+  return html;
+}
+function attachCommandesEvents(db){
+  const sel = document.getElementById('clientSelect');
+  if(sel) sel.addEventListener('change', function(e){ window.__selectedClientId = e.target.value; renderCommandesOnly(db); });
+}
+function renderCommandesOnly(db){ document.querySelector('.main').innerHTML = pageCommandes(db); attachCommandesEvents(db); }
+function addProduit(pid){ const db=getDb(); const l=panier.find(function(x){return x.product_id===pid;}); if(l) l.quantite++; else panier.push({product_id:pid,quantite:1}); renderCommandesOnly(db); }
+function updateQty(pid,delta){ const db=getDb(); const l=panier.find(function(x){return x.product_id===pid;}); if(l){ l.quantite=Math.max(1,l.quantite+delta); } renderCommandesOnly(db); }
+function removeProduit(pid){ const db=getDb(); panier = panier.filter(function(x){return x.product_id!==pid;}); renderCommandesOnly(db); }
+function validerCommande(){
+  const db = getDb();
+  const clientId = window.__selectedClientId;
+  if(!clientId || panier.length===0) return;
+  const result = creerCommande(db, clientId, panier, 'interne');
+  panier = [];
+  window.__selectedClientId = clientId;
+  const html = '<div class="card" style="border-color:rgba(31,77,46,.25);">' +
+    '<p style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px;">' + ICONS.check + ' Commande enregistree</p>' +
+    '<p class="muted" style="font-size:12.5px;">' + result.decision.motif + '</p>' +
+    (result.credit ? '<p class="muted" style="font-size:12.5px;margin-top:8px;">Echeance : ' + fmtDate(result.credit.date_echeance) + '</p>' : '') +
+    '</div>';
+  renderCommandesOnly(db);
+  document.getElementById('resultatCommande').innerHTML = html;
+}
+
+/* ---------- Page : Encours credit ---------- */
+let creditsFilter = '';
+function pageCredits(db){
+  let list = db.credits.map(function(c){
+    const statut_affiche = c.statut==='paye' ? 'paye' : (new Date()>new Date(c.date_echeance)?'en_retard':'en_cours');
+    const cl = db.clients.find(function(x){return x.id===c.client_id;});
+    return Object.assign({}, c, { statut_affiche:statut_affiche, client_nom: cl ? cl.nom : '?' });
+  });
+  if(creditsFilter) list = list.filter(function(c){return c.statut_affiche===creditsFilter;});
+  list.sort(function(a,b){return new Date(a.date_echeance)-new Date(b.date_echeance);});
+
+  const filtres = [['','Tous'],['en_cours','En cours'],['en_retard','En retard'],['paye','Payes']];
+  let html = '<header class="pagehead"><div><h1>Encours credit</h1><p>Suivi des creances et enregistrement des remboursements</p></div></header>';
+  html += '<div class="pillrow">' + filtres.map(function(f){ return '<button class="btn btn-outline '+(creditsFilter===f[0]?'active':'')+'" onclick="setCreditsFilter(\''+f[0]+'\')">'+f[1]+'</button>'; }).join('') + '</div>';
+  html += '<div class="table-wrap"><table><thead><tr><th>Client</th><th>Montant</th><th>Octroi</th><th>Echeance</th><th>Statut</th><th></th></tr></thead><tbody>';
+  if(list.length===0){ html += '<tr><td colspan="6" class="empty">Aucune creance.</td></tr>'; }
+  else {
+    html += list.map(function(c){
+      let statutBadge;
+      if(c.statut_affiche==='paye') statutBadge = c.paye_en_retard ? '<span class="badge badge-amber">Paye en retard</span>' : '<span class="badge badge-green">Paye a temps</span>';
+      else if(c.statut_affiche==='en_retard') statutBadge = '<span class="badge badge-red">En retard</span>';
+      else statutBadge = '<span class="badge badge-gray">En cours</span>';
+      const action = c.statut_affiche!=='paye' ? '<button class="btn-text" style="font-size:12.5px;display:inline-flex;align-items:center;gap:5px;" onclick="openPaiementModal(\''+c.id+'\')">'+ICONS.cash+' Marquer paye</button>' : '';
+      return '<tr><td><a href="#/clients/'+c.client_id+'" style="color:var(--green);font-weight:500;">'+c.client_nom+'</a></td>' +
+        '<td style="font-weight:500;">'+fmtFCFA(c.montant_du)+'</td><td class="muted">'+fmtDate(c.date_octroi)+'</td><td class="muted">'+fmtDate(c.date_echeance)+'</td>' +
+        '<td>'+statutBadge+'</td><td style="text-align:right;">'+action+'</td></tr>';
+    }).join('');
+  }
+  html += '</tbody></table></div><div id="modalRoot"></div>';
+  return html;
+}
+function setCreditsFilter(v){ creditsFilter=v; const db=getDb(); document.querySelector('.main').innerHTML = pageCredits(db); }
+function openPaiementModal(creditId){
+  const db = getDb();
+  const credit = db.credits.find(function(c){return c.id===creditId;});
+  const cl = db.clients.find(function(c){return c.id===credit.client_id;});
+  const clientNom = cl ? cl.nom : '';
+  document.getElementById('modalRoot').innerHTML =
+    '<div class="modal-overlay" onclick="if(event.target===this) this.remove()"><div class="modal">' +
+    '<div class="modal-head"><h3>Enregistrer un paiement — ' + clientNom + '</h3><button class="btn-icon" onclick="this.closest(\'.modal-overlay\').remove()">' + ICONS.x + '</button></div>' +
+    '<div class="modal-body"><form id="paiementForm">' +
+      '<div class="field"><label>Montant du</label><p style="font-size:19px;font-weight:600;margin:0;">' + fmtFCFA(credit.montant_du) + '</p></div>' +
+      '<div class="field" style="margin-top:12px;"><label>Montant recu</label><input type="number" required min="1" name="montant" value="' + credit.montant_du + '"/></div>' +
+      '<div class="field"><label>Methode</label><select name="methode"><option value="cash">Especes</option><option value="wave">Wave</option><option value="orange_money">Orange Money</option></select></div>' +
+      '<button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px;">Confirmer le paiement</button>' +
+    '</form></div></div></div>';
+  document.getElementById('paiementForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const db2 = getDb();
+    enregistrerPaiement(db2, creditId, Number(fd.get('montant')), fd.get('methode'));
+    document.querySelector('.modal-overlay').remove();
+    document.querySelector('.main').innerHTML = pageCredits(db2);
+  });
+}
+
+/* ---------- Page : Parametres ---------- */
+function pageParametres(){
+  let html = '<header class="pagehead"><div><h1>Parametres du moteur de credit</h1><p>Regles de paliers et de plafonds appliquees automatiquement</p></div></header>';
+  html += '<div class="grid grid-4" style="margin-bottom:18px;">' +
+    Object.keys(PALIERS).map(function(niveau){
+      const p = PALIERS[niveau];
+      return '<div class="card"><p style="font-size:11.5px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Palier ' + niveau + '</p>' +
+        '<h3 style="font-size:17px;margin-bottom:12px;">' + p.nom + '</h3>' +
+        '<p style="font-size:13px;color:var(--muted);margin:4px 0;">Plafond : <strong style="color:var(--text);">' + fmtFCFA(p.plafond) + '</strong></p>' +
+        '<p style="font-size:13px;color:var(--muted);margin:4px 0;">Delai : <strong style="color:var(--text);">' + p.delaiJours + ' jour' + (p.delaiJours>1?'s':'') + '</strong></p></div>';
+    }).join('') + '</div>';
+  html += '<div class="card"><p style="font-weight:600;font-size:15px;margin-bottom:14px;">Regles de gestion du risque</p>' +
+    '<ul style="padding-left:20px;line-height:1.9;font-size:13.5px;">' +
+    '<li>Un nouveau client (Palier 0) doit regler ses 2-3 premieres commandes au comptant avant d\'acceder au credit.</li>' +
+    '<li>Le nano credit est reserve aux restaurants, gargotieres, tanganaas et dibiteries — menages et hotels restent au comptant.</li>' +
+    '<li>La montee de palier est gelee pendant 30 jours apres tout retard de paiement constate.</li>' +
+    '<li>Un retard de paiement fait redescendre le client d\'un palier au moment du remboursement tardif.</li>' +
+    '<li>Le plafond disponible = plafond du palier − encours non rembourse, recalcule a chaque commande.</li>' +
+    '<li>Si le montant depasse le plafond disponible, un paiement mixte (comptant + credit) est propose automatiquement.</li>' +
+    '</ul></div>';
+  html += '<div class="card card-alt" style="margin-top:18px;"><p style="font-weight:600;font-size:14px;margin-bottom:6px;">Donnees de cette demo</p>' +
+    '<p class="muted" style="font-size:13px;margin-bottom:12px;">Toutes les donnees (clients, commandes, creances) sont stockees uniquement dans ce navigateur (localStorage), sur cet appareil. Rien n\'est envoye a un serveur.</p>' +
+    '<button class="btn btn-outline" onclick="resetDemoData()">Reinitialiser les donnees de demonstration</button></div>';
+  return html;
+}
+</script>
+</body>
+</html>

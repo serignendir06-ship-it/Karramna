@@ -16,6 +16,12 @@
 <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4D2E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Karramna Agro">
 <link rel="stylesheet" href="css/style.css">
 <script type="application/ld+json">
 {
@@ -46,6 +52,10 @@
           <a href="mailto:contact@karramna-agro.sn">contact@karramna-agro.sn</a>
         </div>
         <div class="topbar-links">
+        <div class="lang-switch" role="group" aria-label="Choix de la langue / Language">
+          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
           <span data-i18n="topbar.location">Pikine, Dakar — Sénégal</span>
         </div>
       </div>
@@ -56,17 +66,18 @@
         <span>Karramna Agro<span class="brand-sub">Marketplace agroalimentaire</span></span>
       </a>
       <nav class="nav-links" aria-label="Navigation principale">
+        <div class="nav-mobile-lang lang-switch" role="group" aria-label="Choix de la langue / Language">
+          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
         <a href="index.html" aria-current="page" data-i18n="nav.home">Accueil</a>
         <a href="catalogue.html" data-i18n="nav.catalogue">Catalogue</a>
         <a href="packs.html" data-i18n="nav.packs">Packs & Kits</a>
         <a href="apropos.html" data-i18n="nav.about">À propos</a>
+        <a href="professionnels.html" data-i18n="nav.professionals">Professionnels</a>
         <a href="contact.html" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="nav-actions">
-        <div class="lang-switch" role="group" aria-label="Choix de la langue / Language">
-          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
-          <button type="button" class="lang-btn" data-lang="en">EN</button>
-        </div>
         <a href="compte.html" class="account-btn" id="accountNavLink" aria-label="Mon compte">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
           <span class="account-label" id="accountNavLabel">Se connecter</span>
@@ -85,23 +96,23 @@
   <section class="hero" id="hero">
     <div class="hero-slides" id="heroSlides">
       <div class="hero-slide active" data-slide="1">
-        <div class="img-style scale-img"><img src="images/hero/catalogue.jpg" width="1600" height="900" alt="Catalogue de produits agroalimentaires Karramna Agro"></div>
+        <div class="img-style scale-img"><img src="images/hero/catalogue.jpg" width="1600" height="900" alt="Catalogue de produits agroalimentaires Karramna Agro" fetchpriority="high"></div>
         <div class="hero-slide-overlay"></div>
       </div>
       <div class="hero-slide" data-slide="2">
-        <div class="img-style scale-img"><img src="images/hero/packs.jpg" width="1600" height="900" alt="Packs et kits alimentaires prêts à commander"></div>
+        <div class="img-style scale-img"><img src="images/hero/packs.jpg" width="1600" height="900" alt="Packs et kits alimentaires prêts à commander" loading="lazy"></div>
         <div class="hero-slide-overlay"></div>
       </div>
       <div class="hero-slide" data-slide="3">
-        <div class="img-style scale-img"><img src="images/hero/livraison.jpg" width="1600" height="900" alt="Livraison à moto des commandes à Dakar"></div>
+        <div class="img-style scale-img"><img src="images/hero/livraison.jpg" width="1600" height="900" alt="Livraison à moto des commandes à Dakar" loading="lazy"></div>
         <div class="hero-slide-overlay"></div>
       </div>
       <div class="hero-slide" data-slide="4">
-        <div class="img-style scale-img"><img src="images/hero/fournisseurs.jpg" width="1600" height="900" alt="Fournisseurs et producteurs locaux partenaires de Karramna Agro"></div>
+        <div class="img-style scale-img"><img src="images/hero/fournisseurs.jpg" width="1600" height="900" alt="Fournisseurs et producteurs locaux partenaires de Karramna Agro" loading="lazy"></div>
         <div class="hero-slide-overlay"></div>
       </div>
       <div class="hero-slide" data-slide="5">
-        <div class="img-style scale-img"><img src="images/hero/nanocredit.jpg" width="1600" height="900" alt="Nano crédit fournisseur Karramna Agro : commandez maintenant, payez ensuite"></div>
+        <div class="img-style scale-img"><img src="images/hero/nanocredit.jpg" width="1600" height="900" alt="Nano crédit fournisseur Karramna Agro : commandez maintenant, payez ensuite" loading="lazy"></div>
         <div class="hero-slide-overlay"></div>
       </div>
     </div>
@@ -126,7 +137,7 @@
         </h1>
       </div>
       <div class="hero-sub-tags" id="heroSubTags">
-        <span data-i18n="hero.tagCatalogue" class="active">Catalogue</span><span data-i18n="hero.tagPacks">Packs &amp; kits</span><span data-i18n="hero.tagLivraison">Livraison Dakar</span><span data-i18n="hero.tagFourn">Fournisseurs locaux</span><span data-i18n="hero.tagNanoCredit">Nano Crédit</span>
+        <span data-i18n="hero.tagCatalogue" class="active">Catalogue</span><span data-i18n="hero.tagPacks">Packs &amp; kits</span><span data-i18n="hero.tagLivraison">Livraison Dakar</span><span data-i18n="hero.tagFourn">Fournisseurs locaux</span><span data-i18n="hero.tagNanoCredit">NAKA</span>
       </div>
       <div class="hero-cta" id="heroCta">
         <a href="catalogue.html" class="btn btn-amber" data-i18n="hero.ctaCatalogue">Voir le catalogue</a>
@@ -223,109 +234,7 @@
         </div>
         <a href="catalogue.html" class="btn btn-outline" data-i18n="featured.cta">Voir tous les produits</a>
       </div>
-      <div class="grid-products" id="featured-products">
-      <!-- ===== PRODUIT : Riz brisé parfumé (p01) =====
-           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
-           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
-           puis changez data-id (doit être unique sur tout le site) et le contenu.
-           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
-      <article class="product-card"
-        data-id="p01" data-cat="cereales" data-price="13500"
-        data-name="Riz brisé parfumé" data-name-en="Fragrant broken rice"
-        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
-        data-supplier="Coopérative Vallée du Fleuve"
-        data-desc="Riz brisé importé, grain court, idéal pour le tiéboudieune et les plats mijotés. Conditionné en sacs de 25 kg, livré scellé d'origine." data-desc-en="Imported broken rice, short grain, ideal for tiéboudieune and stews. Packed in 25 kg bags, delivered factory-sealed."
-        data-badge="Populaire" data-badge-en="Popular">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/products/p01.jpg" width="800" height="600" alt="Riz brisé parfumé"></div>
-        <span class="tag-badge">Populaire</span>
-        </div>
-        <div class="card-body">
-          <h3>Riz brisé parfumé</h3>
-          <span class="card-unit">sac de 25 kg · Coopérative Vallée du Fleuve</span>
-          <div class="card-price-row">
-            <span class="card-price">13 500 FCFA<br><small>sac de 25 kg</small></span>
-            <button class="btn btn-primary btn-sm" data-add="p01">Ajouter</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== PRODUIT : Mil local (souna) (p02) =====
-           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
-           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
-           puis changez data-id (doit être unique sur tout le site) et le contenu.
-           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
-      <article class="product-card"
-        data-id="p02" data-cat="cereales" data-price="21000"
-        data-name="Mil local (souna)" data-name-en="Local millet (souna)"
-        data-unit="sac de 50 kg" data-unit-en="50 kg bag"
-        data-supplier="Groupement Bassin Arachidier"
-        data-desc="Mil local (souna) cultivé dans le Bassin arachidier, moulu ou entier selon disponibilité. Base du couscous de mil et du lakh." data-desc-en="Local millet (souna) grown in the Groundnut Basin, milled or whole depending on availability. Base for millet couscous and lakh."
-        data-badge="" data-badge-en="">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/products/p02.jpg" width="800" height="600" alt="Mil local (souna)"></div>
-        </div>
-        <div class="card-body">
-          <h3>Mil local (souna)</h3>
-          <span class="card-unit">sac de 50 kg · Groupement Bassin Arachidier</span>
-          <div class="card-price-row">
-            <span class="card-price">21 000 FCFA<br><small>sac de 50 kg</small></span>
-            <button class="btn btn-primary btn-sm" data-add="p02">Ajouter</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== PRODUIT : Maïs jaune (p03) =====
-           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
-           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
-           puis changez data-id (doit être unique sur tout le site) et le contenu.
-           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
-      <article class="product-card"
-        data-id="p03" data-cat="cereales" data-price="17500"
-        data-name="Maïs jaune" data-name-en="Yellow maize"
-        data-unit="sac de 50 kg" data-unit-en="50 kg bag"
-        data-supplier="Ferme Kaolack"
-        data-desc="Maïs jaune sec, grain calibré, adapté à la mouture pour farine ou à l'alimentation animale." data-desc-en="Dry yellow maize, graded kernels, suited for milling into flour or animal feed."
-        data-badge="" data-badge-en="">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/products/p03.jpg" width="800" height="600" alt="Maïs jaune"></div>
-        </div>
-        <div class="card-body">
-          <h3>Maïs jaune</h3>
-          <span class="card-unit">sac de 50 kg · Ferme Kaolack</span>
-          <div class="card-price-row">
-            <span class="card-price">17 500 FCFA<br><small>sac de 50 kg</small></span>
-            <button class="btn btn-primary btn-sm" data-add="p03">Ajouter</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== PRODUIT : Oignon local (p04) =====
-           Pour modifier ce produit : changez le texte ci-dessous (nom, prix, description...).
-           Pour AJOUTER un produit : copiez ce bloc <article>...</article> en entier, collez-le,
-           puis changez data-id (doit être unique sur tout le site) et le contenu.
-           Pour SUPPRIMER un produit : supprimez le bloc <article>...</article> en entier. -->
-      <article class="product-card"
-        data-id="p04" data-cat="legumes" data-price="9800"
-        data-name="Oignon local" data-name-en="Local onion"
-        data-unit="sac de 25 kg" data-unit-en="25 kg bag"
-        data-supplier="Producteurs Niayes"
-        data-desc="Oignon violet local des Niayes, bulbe ferme à forte conservation, essentiel pour vos sauces et bases de plats." data-desc-en="Local purple onion from the Niayes, firm bulb with strong keeping quality, essential for sauces and dish bases."
-        data-badge="Frais du jour" data-badge-en="Fresh today">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/products/p04.jpg" width="800" height="600" alt="Oignon local"></div>
-        <span class="tag-badge">Frais du jour</span>
-        </div>
-        <div class="card-body">
-          <h3>Oignon local</h3>
-          <span class="card-unit">sac de 25 kg · Producteurs Niayes</span>
-          <div class="card-price-row">
-            <span class="card-price">9 800 FCFA<br><small>sac de 25 kg</small></span>
-            <button class="btn btn-primary btn-sm" data-add="p04">Ajouter</button>
-          </div>
-        </div>
-      </article>
-      </div>
+      <div class="grid-products" id="featured-products"></div>
     </div>
   </section>
 
@@ -367,100 +276,21 @@
         </div>
         <a href="packs.html" class="btn btn-outline" data-i18n="featured.packsCta">Tous les packs</a>
       </div>
-      <div class="grid-products cols-3" id="featured-packs">
-      <!-- ===== PACK : Pack Ménage Mensuel (k01) =====
-           Pour modifier : changez le texte ci-dessous (nom, prix, contenu du panier...).
-           Le contenu (data-contents) utilise " · " pour séparer chaque article.
-           Pour AJOUTER un pack : copiez ce bloc <article>...</article> en entier et changez data-id.
-           Pour SUPPRIMER un pack : supprimez le bloc <article>...</article> en entier. -->
-      <article class="pack-card"
-        data-id="k01" data-price="42000" data-old-price="49500"
-        data-name="Pack Ménage Mensuel" data-name-en="Monthly Household Pack"
-        data-tagline="L'essentiel pour une famille de 6 à 8 personnes, pour tout le mois." data-tagline-en="The essentials for a family of 6 to 8, for the whole month."
-        data-desc="Le panier mensuel complet pour nourrir une famille de 6 à 8 personnes : céréales, huile, oignon et condiments de base réunis à prix groupé." data-desc-en="The complete monthly basket to feed a family of 6 to 8: grains, oil, onion and basic condiments at a group price."
-        data-contents="Riz brisé 25 kg · Huile de tournesol 5 L · Oignon 10 kg · Sel 2 kg · 2 cartons de cubes" data-contents-en="Broken rice 25 kg · Sunflower oil 5 L · Onion 10 kg · Salt 2 kg · 2 cartons of seasoning cubes"
-        data-badge="Best-seller" data-badge-en="Best-seller">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/packs/k01.jpg" width="800" height="600" alt="Pack Ménage Mensuel"></div>
-        <span class="tag-badge badge-amber">Best-seller</span>
-        </div>
-        <div class="card-body">
-          <h3>Pack Ménage Mensuel</h3>
-          <span class="card-unit">L'essentiel pour une famille de 6 à 8 personnes, pour tout le mois.</span>
-          <div class="pack-contents">Riz brisé 25 kg · Huile de tournesol 5 L · Oignon 10 kg · Sel 2 kg · 2 cartons de cubes</div>
-          <div class="card-price-row">
-            <div>
-              <span class="old-price">49 500 FCFA</span>
-              <span class="card-price">42 000 FCFA</span>
-              <div class="pack-save">Économie 7 500 FCFA</div>
-            </div>
-            <button class="btn btn-amber btn-sm" data-add="k01">Ajouter</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== PACK : Pack Restaurant / Gargote (k02) =====
-           Pour modifier : changez le texte ci-dessous (nom, prix, contenu du panier...).
-           Le contenu (data-contents) utilise " · " pour séparer chaque article.
-           Pour AJOUTER un pack : copiez ce bloc <article>...</article> en entier et changez data-id.
-           Pour SUPPRIMER un pack : supprimez le bloc <article>...</article> en entier. -->
-      <article class="pack-card"
-        data-id="k02" data-price="96000" data-old-price="112000"
-        data-name="Pack Restaurant / Gargote" data-name-en="Restaurant / Small Eatery Pack"
-        data-tagline="Approvisionnement hebdomadaire pour petites restauration." data-tagline-en="Weekly supply for small food businesses."
-        data-desc="Réapprovisionnement hebdomadaire pensé pour les gargotes et petits restaurants : quantités adaptées à une activité de restauration quotidienne." data-desc-en="Weekly restocking designed for small eateries and restaurants: quantities suited to daily food service."
-        data-contents="Riz brisé 50 kg · Huile 20 L · Oignon 25 kg · Tomate 15 kg · Poulet x10 · Concentré de tomate x24" data-contents-en="Broken rice 50 kg · Oil 20 L · Onion 25 kg · Tomato 15 kg · Chicken x10 · Tomato paste x24"
-        data-badge="Pro" data-badge-en="Pro">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/packs/k02.jpg" width="800" height="600" alt="Pack Restaurant / Gargote"></div>
-        <span class="tag-badge badge-amber">Pro</span>
-        </div>
-        <div class="card-body">
-          <h3>Pack Restaurant / Gargote</h3>
-          <span class="card-unit">Approvisionnement hebdomadaire pour petites restauration.</span>
-          <div class="pack-contents">Riz brisé 50 kg · Huile 20 L · Oignon 25 kg · Tomate 15 kg · Poulet x10 · Concentré de tomate x24</div>
-          <div class="card-price-row">
-            <div>
-              <span class="old-price">112 000 FCFA</span>
-              <span class="card-price">96 000 FCFA</span>
-              <div class="pack-save">Économie 16 000 FCFA</div>
-            </div>
-            <button class="btn btn-amber btn-sm" data-add="k02">Ajouter</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== PACK : Pack Événement / Cérémonie (k03) =====
-           Pour modifier : changez le texte ci-dessous (nom, prix, contenu du panier...).
-           Le contenu (data-contents) utilise " · " pour séparer chaque article.
-           Pour AJOUTER un pack : copiez ce bloc <article>...</article> en entier et changez data-id.
-           Pour SUPPRIMER un pack : supprimez le bloc <article>...</article> en entier. -->
-      <article class="pack-card"
-        data-id="k03" data-price="165000" data-old-price="189000"
-        data-name="Pack Événement / Cérémonie" data-name-en="Event / Ceremony Pack"
-        data-tagline="Baptême, mariage, cérémonie religieuse — pour 100 à 150 convives." data-tagline-en="Baptism, wedding, religious ceremony — for 100 to 150 guests."
-        data-desc="Pack cérémonie pour baptêmes, mariages et fêtes religieuses. Quantités calculées pour 100 à 150 convives, moutons inclus." data-desc-en="Ceremony pack for baptisms, weddings and religious celebrations. Quantities calculated for 100 to 150 guests, sheep included."
-        data-contents="Riz 100 kg · Huile 40 L · 3 moutons · Oignon 30 kg · Épices & condiments assortis" data-contents-en="Rice 100 kg · Oil 40 L · 3 sheep · Onion 30 kg · Assorted spices & condiments"
-        data-badge="" data-badge-en="">
-        <div class="card-media">
-          <div class="img-style scale-img"><img src="images/packs/k03.jpg" width="800" height="600" alt="Pack Événement / Cérémonie"></div>
-        </div>
-        <div class="card-body">
-          <h3>Pack Événement / Cérémonie</h3>
-          <span class="card-unit">Baptême, mariage, cérémonie religieuse — pour 100 à 150 convives.</span>
-          <div class="pack-contents">Riz 100 kg · Huile 40 L · 3 moutons · Oignon 30 kg · Épices & condiments assortis</div>
-          <div class="card-price-row">
-            <div>
-              <span class="old-price">189 000 FCFA</span>
-              <span class="card-price">165 000 FCFA</span>
-              <div class="pack-save">Économie 24 000 FCFA</div>
-            </div>
-            <button class="btn btn-amber btn-sm" data-add="k03">Ajouter</button>
-          </div>
-        </div>
-      </article>
-      </div>
+      <div class="grid-products cols-3" id="featured-packs"></div>
     </div>
+  </section>
+
+  <!-- ===== BANNIÈRE PUBLICITAIRE =====
+       Image pleine largeur, 500px de haut sur desktop (réduite sur mobile
+       pour rester lisible). Pour changer la bannière : remplacez le fichier
+       images/pages/promo-banner.jpg (mêmes proportions 1600x500 conseillées),
+       ou changez le lien href ci-dessous pour pointer ailleurs. -->
+  <section class="ad-banner">
+    <a href="packs.html" aria-label="Découvrir les packs et kits Karramna Agro">
+      <div class="img-style scale-img">
+        <img src="images/pages/promo-banner.jpg" width="1600" height="500" alt="Packs & Kits Karramna Agro — Composez moins cher, mangez aussi bien. -15% en moyenne." loading="lazy" decoding="async">
+      </div>
+    </a>
   </section>
 
   <section>
@@ -546,7 +376,9 @@
             <li><a href="catalogue.html" data-i18n="nav.catalogue">Catalogue produits</a></li>
             <li><a href="packs.html" data-i18n="nav.packs">Packs & Kits</a></li>
             <li><a href="apropos.html" data-i18n="nav.about">À propos</a></li>
-            <li><a href="https://credit.karramna-agro.sn" class="nano-credit-link" target="_blank" rel="noopener" data-i18n="nav.nanoCredit">Nano Crédit</a></li>
+            <li><a href="professionnels.html" data-i18n="nav.professionals">Professionnels</a></li>
+            <li><a href="devis.html" data-i18n="b2b.quoteCta">Demander un devis</a></li>
+            <li><a href="naka.html" class="nano-credit-link" target="_blank" rel="noopener" data-i18n="nav.nanoCredit">NAKA</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -575,6 +407,29 @@
     </div>
   </footer>
 
+  <!-- ===== POP-UP "OFFRE DU MOIS" (accueil uniquement) =====
+       S'affiche une fois par session, quelques instants après le chargement.
+       Pour changer le produit/pack mis en avant : voir MONTHLY_FEATURED_ID
+       dans js/data.js — rien d'autre à modifier ici. -->
+  <div id="monthlyPromoOverlay" class="detail-modal-overlay promo-modal-overlay" hidden>
+    <div class="detail-modal promo-modal" role="dialog" aria-modal="true" aria-label="Offre du mois">
+      <button type="button" class="detail-modal-close" id="monthlyPromoClose" aria-label="Fermer">&times;</button>
+      <div class="detail-modal-grid" id="monthlyPromoContent"></div>
+    </div>
+  </div>
+
+  <div id="installBanner" class="install-banner" hidden>
+    <div class="install-banner-icon"><img src="icons/icon-192.png" width="40" height="40" alt=""></div>
+    <div class="install-banner-text">
+      <strong>Installer Karramna Agro</strong>
+      <span>Accès rapide depuis votre écran d'accueil, sans navigateur.</span>
+    </div>
+    <button type="button" id="installBtn" class="btn btn-primary btn-sm">Installer</button>
+    <button type="button" id="installDismiss" class="install-banner-close" aria-label="Fermer">&times;</button>
+  </div>
+
+
+
   <a href="#" class="whatsapp-float" aria-label="Nous écrire sur WhatsApp" data-i18n-aria="common.whatsappFloat" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.6 6.6 0 0 1-1.9-1.2 7 7 0 0 1-1.3-1.6c-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4a.5.5 0 0 0 0-.5c-.1-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.7 4.7 0 0 0 1 2.5 10.7 10.7 0 0 0 4.1 3.6c.6.2 1 .4 1.4.5a3.4 3.4 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 1.9 1.9 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3Z"/></svg>
   </a>
@@ -582,7 +437,10 @@
   <script src="js/data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/catalog.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/pwa.js"></script>
 </body>
 </html>
 

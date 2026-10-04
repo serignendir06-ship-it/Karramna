@@ -16,6 +16,12 @@
 <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4D2E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Karramna Agro">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,6 +33,10 @@
           <a href="mailto:contact@karramna-agro.sn">contact@karramna-agro.sn</a>
         </div>
         <div class="topbar-links">
+        <div class="lang-switch" role="group" aria-label="Choix de la langue / Language">
+          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
           <span data-i18n="topbar.location">Pikine, Dakar — Sénégal</span>
         </div>
       </div>
@@ -37,17 +47,18 @@
         <span>Karramna Agro<span class="brand-sub">Marketplace agroalimentaire</span></span>
       </a>
       <nav class="nav-links" aria-label="Navigation principale">
+        <div class="nav-mobile-lang lang-switch" role="group" aria-label="Choix de la langue / Language">
+          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
         <a href="index.html"><span data-i18n="nav.home">Accueil</span></a>
         <a href="catalogue.html" data-i18n="nav.catalogue">Catalogue</a>
         <a href="packs.html" data-i18n="nav.packs">Packs & Kits</a>
         <a href="apropos.html" aria-current="page" data-i18n="nav.about">À propos</a>
+        <a href="professionnels.html" data-i18n="nav.professionals">Professionnels</a>
         <a href="contact.html" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="nav-actions">
-        <div class="lang-switch" role="group" aria-label="Choix de la langue / Language">
-          <button type="button" class="lang-btn active" data-lang="fr">FR</button>
-          <button type="button" class="lang-btn" data-lang="en">EN</button>
-        </div>
         <a href="compte.html" class="account-btn" id="accountNavLink" aria-label="Mon compte">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
           <span class="account-label" id="accountNavLabel">Se connecter</span>
@@ -64,7 +75,7 @@
     </div>
   </header>
   <div class="page-header">
-    <div class="img-style scale-img"><img src="images/pages/apropos.jpg" width="1600" height="500" alt="L'équipe et la mission de Karramna Agro"></div>
+    <div class="img-style scale-img"><img src="images/pages/apropos.jpg" width="1600" height="500" alt="L'équipe et la mission de Karramna Agro" fetchpriority="high" decoding="async"></div>
     <div class="page-header-overlay"></div>
     <div class="container">
       <div class="breadcrumb"><a href="index.html"><span data-i18n="nav.home">Accueil</span></a> / <span data-i18n="pageHeaders.apropos.bc">À propos</span></div>
@@ -107,15 +118,15 @@
       <div class="loyalty-promo">
         <div>
           <span class="eyebrow" data-i18n="apropos.ncBadge">Notre différenciateur</span>
-          <h2 data-i18n="apropos.ncTitle">Le nano crédit fournisseur Karramna Agro</h2>
-          <p data-i18n="apropos.ncP">Un crédit fournisseur court terme pensé pour les restaurateurs, gargotières, tanganaas et dibiteries : commandez maintenant, payez sous quelques jours, selon un plafond calculé automatiquement par notre moteur de scoring.</p>
+          <h2 data-i18n="apropos.ncTitle">NAKA, le crédit fournisseur Karramna Agro</h2>
+          <p data-i18n="apropos.ncP">NAKA est le crédit fournisseur court terme pensé pour les restaurateurs, gargotières, tanganaas et dibiteries : commandez maintenant, payez sous quelques jours, selon un plafond calculé automatiquement par notre moteur de scoring.</p>
           <ul class="loyalty-promo-list">
             <li data-i18n="apropos.ncLi1">Un score qui évolue à chaque commande honorée, sans dossier ni paperasse</li>
             <li data-i18n="apropos.ncLi2">Un plafond disponible et un encours visibles en temps réel</li>
             <li data-i18n="apropos.ncLi3">Paiement mixte automatique (comptant + crédit) si le plafond est atteint</li>
             <li data-i18n="apropos.ncLi4">Décision de crédit instantanée, directement depuis la commande WhatsApp</li>
           </ul>
-          <a href="https://credit.karramna-agro.sn" id="ncPlatformLink" class="btn btn-primary nano-credit-link" target="_blank" rel="noopener" data-i18n="apropos.ncCta">Accéder à la plateforme nano crédit</a>
+          <a href="naka.html" id="ncPlatformLink" class="btn btn-primary nano-credit-link" target="_blank" rel="noopener" data-i18n="apropos.ncCta">Accéder à NAKA</a>
         </div>
         <div class="loyalty-tiers loyalty-tiers-2col">
           <div class="loyalty-tier">
@@ -151,6 +162,8 @@
             <li data-i18n="apropos.loyaltyLi2">Dès 500 points : -1 000 FCFA offerts sur votre prochaine commande</li>
             <li data-i18n="apropos.loyaltyLi3">Dès 1 500 points : livraison gratuite illimitée et offres exclusives</li>
             <li data-i18n="apropos.loyaltyLi4">50 points offerts dès la création de votre compte</li>
+            <li data-i18n="apropos.loyaltyLi5">Un catalogue de récompenses à échanger à tout moment contre vos points</li>
+            <li data-i18n="apropos.loyaltyLi6">Parrainez vos amis : 100 points offerts par filleul inscrit</li>
           </ul>
           <a href="compte.html" class="btn btn-primary" data-i18n="apropos.loyaltyCta">Créer mon compte fidélité</a>
         </div>
@@ -209,7 +222,9 @@
             <li><a href="catalogue.html" data-i18n="nav.catalogue">Catalogue produits</a></li>
             <li><a href="packs.html" data-i18n="nav.packs">Packs & Kits</a></li>
             <li><a href="apropos.html" data-i18n="nav.about">À propos</a></li>
-            <li><a href="https://credit.karramna-agro.sn" class="nano-credit-link" target="_blank" rel="noopener" data-i18n="nav.nanoCredit">Nano Crédit</a></li>
+            <li><a href="professionnels.html" data-i18n="nav.professionals">Professionnels</a></li>
+            <li><a href="devis.html" data-i18n="b2b.quoteCta">Demander un devis</a></li>
+            <li><a href="naka.html" class="nano-credit-link" target="_blank" rel="noopener" data-i18n="nav.nanoCredit">NAKA</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -236,7 +251,17 @@
         <span data-i18n="footer.madeIn">Conçu à Dakar 🇸🇳</span>
       </div>
     </div>
-  </footer>
+  </footer>  <div id="installBanner" class="install-banner" hidden>
+    <div class="install-banner-icon"><img src="icons/icon-192.png" width="40" height="40" alt=""></div>
+    <div class="install-banner-text">
+      <strong>Installer Karramna Agro</strong>
+      <span>Accès rapide depuis votre écran d'accueil, sans navigateur.</span>
+    </div>
+    <button type="button" id="installBtn" class="btn btn-primary btn-sm">Installer</button>
+    <button type="button" id="installDismiss" class="install-banner-close" aria-label="Fermer">&times;</button>
+  </div>
+
+
 
   <a href="#" class="whatsapp-float" aria-label="Nous écrire sur WhatsApp" data-i18n-aria="common.whatsappFloat" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.6 6.6 0 0 1-1.9-1.2 7 7 0 0 1-1.3-1.6c-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4a.5.5 0 0 0 0-.5c-.1-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.7 4.7 0 0 0 1 2.5 10.7 10.7 0 0 0 4.1 3.6c.6.2 1 .4 1.4.5a3.4 3.4 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 1.9 1.9 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3Z"/></svg>
@@ -245,7 +270,10 @@
   <script src="js/data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/catalog.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/pwa.js"></script>
 </body>
 </html>
 

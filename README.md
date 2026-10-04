@@ -1,99 +1,87 @@
 # Karramna Agro — Site web
 
 Site multi-pages HTML/CSS/JS (sans framework, aucune compilation nécessaire) pour
-la marketplace et coopérative d'achat agroalimentaire Karramna Agro, basée à
-Pikine, Dakar. Ce document explique comment le site est organisé et comment le
-modifier, pour qu'un développeur puisse le reprendre facilement.
+la marketplace agroalimentaire Karramna Agro, basée à Pikine, Dakar. Ce document
+explique comment le site est organisé et comment le modifier, pour qu'un
+développeur puisse le reprendre facilement.
 
-## Principe général : tout le contenu est dans le HTML
+## Principe général : les produits vivent dans `js/catalog.js`
 
-**Le contenu du site (textes, produits, packs, prix, images) est écrit
-directement dans les fichiers `.html`.** Il n'y a pas de base de données ni de
-CMS : pour changer un texte, un prix ou une image, on modifie le fichier HTML
-concerné et on enregistre — c'est immédiatement visible en rechargeant la page.
+**Depuis la dernière évolution du projet (passage à une architecture pensée pour
+grandir vers plusieurs centaines/milliers de produits), les fiches produits et
+packs ne sont plus écrites directement en blocs `<article>` dans le HTML.**
+Elles sont centralisées dans **`js/catalog.js`**, sous forme de deux tableaux
+`PRODUCTS` et `PACKS` — une seule source de vérité, lue par `catalogue.html`,
+`packs.html` et `index.html` pour générer les cartes à l'affichage.
 
-Le JavaScript (`js/`) ne sert qu'à faire fonctionner des mécanismes
-(panier, filtres, recherche, traduction, menu mobile...) ; il ne contient
-plus aucune donnée produit.
+> Historique : une version précédente du site stockait le contenu directement
+> en HTML pour une édition sans JavaScript. Ce choix ne tenait plus face à
+> l'objectif de faire évoluer le catalogue vers un vrai volume B2B (variantes,
+> profils clients, tags, prix pro) sans dupliquer chaque produit à plusieurs
+> endroits. Le changement a été validé avant d'être appliqué.
+
+### Modifier un produit ou un pack (le plus courant)
+
+Ouvrez `js/catalog.js`. Chaque produit est un objet dans le tableau `PRODUCTS` :
+
+```js
+{
+  id: "p01", department: "alimentaire", category: "cereales", subcategory: "riz",
+  name: "Riz brisé parfumé", nameEn: "Fragrant broken rice",
+  unit: "sac de 25 kg", unitEn: "25 kg bag",
+  price: 13500, supplier: "Coopérative Vallée du Fleuve",
+  desc: "...", descEn: "...",
+  badge: "Populaire", badgeEn: "Popular",
+  img: "images/products/p01.jpg",
+  tags: ["essentiel", "gros_volume"],
+  eligibleProfiles: ["restaurant", "traiteur", "menage", "boulangerie"],
+},
+```
+
+| Vous voulez changer... | Modifiez... |
+|---|---|
+| Le nom, le prix, l'unité, la description | Le champ correspondant dans l'objet du produit |
+| L'image | Le champ `img` (chemin vers `images/products/...jpg`) |
+| La catégorie | Le champ `category` (doit correspondre à un `id` de `CATEGORIES` dans `js/data.js`) |
+| Les profils professionnels concernés | Le tableau `eligibleProfiles` |
+| La traduction anglaise | Les champs `...En` |
+
+- **Pour AJOUTER un produit** : copiez un objet, donnez-lui un `id` unique (ex. `p21`), modifiez le contenu.
+- **Pour SUPPRIMER un produit** : supprimez son objet du tableau.
+- Les packs suivent la même logique dans le tableau `PACKS` du même fichier
+  (avec `tagline`, `contents` en tableau de chaînes, et `oldPrice` optionnel
+  pour afficher un prix barré).
+- Aucune donnée produit n'est dupliquée ailleurs : modifier `js/catalog.js`
+  met à jour le catalogue, la page Packs et la sélection sur l'accueil en
+  même temps.
 
 ## Structure des fichiers
 
 ```
 index.html          Accueil (hero, catégories, produits/packs en avant, avis...)
-catalogue.html       Catalogue complet (20 fiches produits + filtres/recherche/tri)
-packs.html            Packs & Kits (6 fiches packs)
+catalogue.html       Catalogue complet (filtres/recherche/tri, généré depuis catalog.js)
+packs.html            Packs & Kits (généré depuis catalog.js)
 panier.html            Panier + tunnel de commande (WhatsApp)
 apropos.html            À propos (mission, étapes, programme fidélité, valeurs)
 contact.html              Contact (coordonnées + formulaire)
 compte.html                  Connexion / inscription / espace client
 
 css/style.css        Toutes les couleurs, polices, styles des composants
-js/data.js            Icônes de catégories, zones de livraison, numéro WhatsApp
+js/catalog.js          Départements, produits (PRODUCTS) et packs (PACKS) — source unique
+js/data.js            Icônes de catégories, catégories, zones de livraison, config (WhatsApp, NAKA)
 js/i18n.js              Dictionnaire de traduction FR/EN (textes de l'interface)
 js/auth.js                Comptes clients, session, commandes, fidélité (localStorage)
 js/account-page.js          Logique de la page "Mon compte"
-js/main.js                    Panier, filtres/recherche/tri, modale produit, menu
+js/main.js                    Rendu des cartes, panier, filtres/recherche/tri, modale, menu
 
 images/               Toutes les images du site (voir plus bas)
 icons/                 Favicon
 fonts/                  Note sur les polices (voir fonts/README.txt)
 ```
 
-## Modifier un produit ou un pack (le plus courant)
-
-Ouvrez `catalogue.html` (pour un produit) ou `packs.html` (pour un pack).
-Chaque fiche est un bloc `<article>` clairement délimité par un commentaire :
-
-```html
-<!-- ===== PRODUIT : Riz brisé parfumé (p01) ===== -->
-<article class="product-card"
-  data-id="p01" data-cat="cereales" data-price="13500"
-  data-name="Riz brisé parfumé" data-name-en="Fragrant broken rice"
-  data-unit="sac de 25 kg" data-unit-en="25 kg bag"
-  data-supplier="Coopérative Vallée du Fleuve"
-  data-desc="Riz brisé importé, grain court..." data-desc-en="Imported broken rice..."
-  data-badge="Populaire" data-badge-en="Popular">
-  <div class="card-media">
-    <div class="img-style scale-img"><img src="images/products/p01.jpg" ...></div>
-    <span class="tag-badge">Populaire</span>
-    <span class="price-tag">13 500 FCFA</span>
-  </div>
-  <div class="card-body">
+## Modifier une catégorie  <div class="card-body">
     <h3>Riz brisé parfumé</h3>
     <span class="card-unit">sac de 25 kg · Coopérative Vallée du Fleuve</span>
-    <div class="card-price-row">
-      <span class="card-price">13 500 FCFA<br><small>sac de 25 kg</small></span>
-      <button class="btn btn-primary btn-sm" data-add="p01">Ajouter</button>
-    </div>
-  </div>
-</article>
-```
-
-**Chaque information apparaît DEUX fois** : une fois dans les attributs
-`data-...` (utilisés par le panier, la fiche détail et la traduction) et une
-fois dans le texte visible (`<h3>`, `<span class="price-tag">`...). **Il faut
-changer les deux** pour rester cohérent. C'est la seule contrainte à retenir :
-
-| Vous voulez changer... | Modifiez... |
-|---|---|
-| Le nom du produit | `data-name` **et** le texte dans `<h3>` |
-| Le prix | `data-price` (nombre sans espace) **et** les 2 endroits où le prix est écrit (`price-tag` et `card-price`) |
-| L'unité (ex. "sac de 25 kg") | `data-unit` **et** le texte dans `.card-unit` et `<small>` |
-| La description (fiche détail) | `data-desc` uniquement (n'apparaît que dans la pop-up) |
-| L'image | le `src="images/products/....jpg"` de la balise `<img>` (voir aussi la section Images) |
-| La traduction anglaise | tous les attributs `-en` (`data-name-en`, `data-desc-en`...) |
-
-- **Pour AJOUTER un produit/pack** : copiez un bloc `<article>...</article>` en
-  entier, collez-le juste après, changez `data-id` (doit être unique sur tout
-  le site, ex. `p21`) et modifiez le contenu.
-- **Pour SUPPRIMER un produit/pack** : supprimez le bloc `<article>...</article>`
-  en entier.
-- Les prix sont en FCFA ; le format d'affichage utilisé est `13 500 FCFA`
-  (espace comme séparateur de milliers).
-- `index.html` reprend telles quelles 4 fiches produits et 3 fiches packs dans
-  ses sections "Produits populaires" / "Packs & Kits" (mêmes blocs `<article>`,
-  à modifier là-bas séparément si besoin).
-
 ## Modifier une catégorie (accueil)
 
 Les 6 catégories affichées sur l'accueil (`#categories-grid` dans `index.html`)
@@ -154,9 +142,11 @@ l'action du visiteur :
 - **Les comptes clients / historique de commandes / fidélité** (`js/auth.js`,
   `js/account-page.js`) : démonstration côté navigateur, voir avertissement
   ci-dessous.
-- **Le filtre / la recherche / le tri du catalogue** : ils affichent ou
-  masquent les fiches déjà présentes dans `catalogue.html`, sans jamais les
-  régénérer.
+- **Le filtre / la recherche / le tri du catalogue** (`js/main.js`,
+  `initCataloguePage`) : génèrent les cartes à partir de `js/catalog.js` à
+  chaque changement de filtre. La recherche reconnaît aussi quelques
+  synonymes de base (ex. "patate" retrouve "pomme de terre") via
+  `SEARCH_SYNONYMS` dans `js/main.js` — à compléter au besoin.
 - **Le sélecteur de langue FR/EN** : bascule l'affichage entre le texte
   français du HTML et les valeurs `-en` / celles de `js/i18n.js`.
 - **Les zones de livraison** (menu déroulant du panier) : liste définie dans
@@ -170,6 +160,17 @@ a été créé, sans synchronisation, et les mots de passe ne sont pas protégé
 sérieusement. C'est fonctionnel pour démontrer l'expérience utilisateur, mais
 **avant une vraie mise en production, il faut le remplacer par une authentification
 réelle** (Supabase Auth est recommandé, voir plus bas).
+
+## Évolutivité prévue (feuille de route B2B)
+
+`js/catalog.js` contient déjà, en plus de `PRODUCTS`/`PACKS`, un tableau
+`DEPARTMENTS` (Alimentaire, Boissons, Emballages, Hygiène & entretien) et,
+sur chaque produit, des champs `tags` et `eligibleProfiles` prêts à être
+exploités par de futurs filtres (profil métier, gros volume, produit local...).
+Ce sont les fondations posées pour faire évoluer le catalogue vers plusieurs
+centaines de références et une logique B2B (prix pro, paliers de quantité,
+devis, pages par profil) sans tout reconstruire — voir le document d'audit
+livré séparément pour le plan détaillé par priorité.
 
 ## À personnaliser avant mise en ligne
 
